@@ -406,7 +406,7 @@ main.wrap { padding-top: 24px; padding-bottom: 32px; display: grid; gap: 24px; }
         <section class="funnel-panel" aria-labelledby="funnel-title">
           <div class="panel-head">
             <h2 id="funnel-title">조회에서 링크 클릭까지</h2>
-            <p class="muted small">공구 링크로 이어지는 흐름. 비율은 바로 앞 단계 대비입니다.</p>
+            <p id="funnel-note" class="muted small">비율은 바로 앞 단계 대비입니다.</p>
           </div>
           <ol id="funnel" class="funnel"></ol>
         </section>
@@ -1134,18 +1134,30 @@ window.DASHBOARD_CONFIG = {
   }
 
   function renderFunnel() {
-    var t = D.sumPosts(postsIn(state.month));
+    var fposts = postsIn(state.month);
+    var t = D.sumPosts(fposts);
+    var viewsText = '게시물 ' + fposts.length + '건, 1건당 평균 ' + fmt(fposts.length ? t.views / fposts.length : 0) + '회';
     var steps = [
       { key: 'views', label: '조회수', color: cssVar('--views'), rate: null },
       { key: 'profile', label: '프로필 방문', color: cssVar('--views'), rate: pct(t.profile, t.views) + ' (조회 대비)' },
       { key: 'link', label: '링크 클릭', color: cssVar('--link'), rate: pct(t.link, t.profile) + ' (프로필 방문 대비)' },
       { key: 'follows', label: '신규 팔로우', color: cssVar('--follow'), rate: pct(t.follows, t.profile) + ' (프로필 방문 대비)' }
     ];
-    var max = t.views || 1;
+    // 막대 길이: 일반 막대 차트처럼 '보기 좋은 최댓값'(눈금)을 기준으로 실제 숫자에 비례
+    var axis;
+    if (state.month === 'all') {
+      axis = niceCeil(t.views);
+      $('funnel-note').textContent = '막대 길이는 0~' + fmt(axis) + ' 눈금 기준이고, 비율은 바로 앞 단계 대비입니다.';
+    } else {
+      var peak = Math.max.apply(null, monthsOf(validPosts()).map(function (m) { return D.sumPosts(postsIn(m)).views; }));
+      axis = niceCeil(peak);
+      $('funnel-note').textContent = '달끼리 비교할 수 있게 모든 달을 0~' + fmt(axis) + ' 같은 눈금으로 그립니다. 비율은 바로 앞 단계 대비입니다.';
+    }
+    var max = axis || 1;
     $('funnel').innerHTML = steps.map(function (s, i) {
       var w = Math.max(t[s.key] / max * 100, 0.8);
       var inside = w >= 22;
-      var text = s.rate || '기준 100%';
+      var text = s.rate || viewsText;
       var bar = inside
         ? '<div class="funnel-bar" style="width:' + w + '%;background:' + s.color + (i === 1 ? ';opacity:.72' : '') + '">' + esc(text) + '</div>'
         : '<div class="funnel-bar" style="width:' + w + '%;padding:0;background:' + s.color + '"></div>' +
@@ -1153,6 +1165,15 @@ window.DASHBOARD_CONFIG = {
       return '<li><div class="funnel-label"><b>' + fmt(t[s.key]) + '</b><span>' + s.label + '</span></div>' +
         '<div class="funnel-track">' + bar + '</div></li>';
     }).join('');
+  }
+
+  // 22,726 → 25,000 / 8,505 → 10,000 처럼 올림한 눈금 값
+  function niceCeil(n) {
+    if (!n || n <= 0) return 1;
+    var p = Math.pow(10, Math.floor(Math.log10(n)));
+    var steps = [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+    for (var i = 0; i < steps.length; i++) if (steps[i] * p >= n * 1.04) return steps[i] * p;
+    return 10 * p;
   }
 
   function deltaHtml(cur, prev) {
