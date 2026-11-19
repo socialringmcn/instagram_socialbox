@@ -229,14 +229,32 @@ button, input, select { font: inherit; color: inherit; }
 .eh .eff-badge { background: var(--card); }
 .eh .cbar { background: var(--card); }
 .er-list { list-style: none; margin: 6px 0 0; padding: 0; }
-.er-list li { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-top: 1px solid var(--line); min-width: 0; font-size: 13px; }
+.er-list li { border-top: 1px solid var(--line); }
 .er-list li:first-child { border-top: 0; }
+.er summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 10px 14px; min-width: 0; font-size: 13px; border-radius: 8px; }
+.er summary::-webkit-details-marker { display: none; }
+.er summary:hover { background: var(--soft); }
+.er summary .eff-title { font-weight: 500; }
 .er-list .eff-rank { width: 20px; height: 20px; font-size: 11px; flex: none; }
 .eff .er-list li .eff-rank { background: var(--soft) !important; color: var(--muted) !important; }
-.er-list .eff-title { font-weight: 500; }
-.er-num { margin-left: auto; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.eff.good .er-num { color: var(--good); }
-.eff.bad .er-num { color: var(--bad); }
+.er-more { margin-left: auto; flex: none; font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.er-more::after { content: "▾"; font-size: 11px; transition: transform .15s; }
+.er[open] .er-more { color: var(--text); }
+.er-more .c, .er[open] .er-more .o { display: none; }
+.er[open] .er-more .c { display: inline; }
+.er[open] .er-more::after { transform: rotate(180deg); }
+.er-body { display: grid; gap: 8px; margin: 0 6px 10px; padding: 12px; border-radius: var(--radius-sm); }
+.eff.good .er-body { background: var(--good-soft); }
+.eff.bad .er-body { background: var(--bad-soft); }
+.er-body .eh-headline strong { font-size: 19px; }
+.er-body .eff-badge, .er-body .cbar { background: var(--card); }
+.er-foot { display: flex; align-items: center; gap: 8px; }
+.er-foot .eff-date { margin-left: 0; }
+.ix-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.ix { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--card); font-variant-numeric: tabular-nums; }
+.ix.up { color: var(--good); }
+.ix.down { color: var(--bad); }
+.btn-sm { height: 28px; padding: 0 10px; font-size: 12px; margin-left: auto; }
 
 /* ---------- 종류별 고효율 · 저효율 ---------- */
 .et { display: grid; gap: 14px; align-content: start; }
@@ -274,8 +292,8 @@ button, input, select { font: inherit; color: inherit; }
 .plan-block { display: grid; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
 .plan-block:first-of-type { border-top: 0; padding-top: 0; }
 .plan-label { font-size: 12.5px; font-weight: 700; color: var(--muted); }
-.plan-insight { font-size: 12.5px; display: grid; gap: 4px; color: var(--muted); }
-.plan-insight b { color: var(--text); }
+.plan-insight { font-size: 13px; font-weight: 600; }
+#plan-types-insight { display: grid; gap: 4px; }
 .plan-insight em { font-style: normal; color: var(--pri); }
 .plan-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
 .plan-table th { text-align: right; font-weight: 600; color: var(--faint); padding: 2px 0 4px 6px; white-space: nowrap; }
@@ -567,6 +585,7 @@ body.modal-open { overflow: hidden; }
               <div class="plan-block">
                 <p class="plan-label">브랜드별 링크 전환</p>
                 <ul id="plan-brands" class="plan-brands"></ul>
+                <p id="plan-brands-insight" class="plan-insight"></p>
               </div>
             </article>
           </div>
@@ -1123,7 +1142,7 @@ window.DASHBOARD_CONFIG = {
     data: null,          // processTable 결과
     source: null,        // { kind: 'sheet'|'file', name, encoding, at }
     month: null,         // 'all' 또는 'YYYY-MM' (처음에는 가장 최근 달)
-    basis: 'link',       // 효율 기준: link | follow | engage
+    basis: 'total',      // 효율 기준: total(종합) | link | follow | engage
     sort: { key: 'date', dir: -1 },
     query: '',
     charts: {},
@@ -1429,7 +1448,10 @@ window.DASHBOARD_CONFIG = {
 
   /* ---------- 고효율 · 저효율 콘텐츠 ---------- */
   // 효율 기준마다 '도달 → … → 결과' 단계를 정의
+  // 종합 점수: 지표별 '평균 대비 배수'를 가중 평균 (지표당 최대 3배까지만 반영)
+  var TOTAL_W = { link: 0.5, follow: 0.3, engage: 0.2 }, TOTAL_CAP = 3;
   var BASIS = {
+    total:  { tab: '종합', act: '', what: '', desc: '' },
     link:   { tab: '링크 전환', act: '링크를 눌렀어요', what: '링크 클릭', whatRo: '링크 클릭으로', step2: '링크 연결', short: '클릭', desc: '대비 링크 클릭',
               steps: [{ k: 'profile', label: '프로필' }, { k: 'link', label: '링크' }],
               num: function (v) { return v.link; } },
@@ -1465,18 +1487,41 @@ window.DASHBOARD_CONFIG = {
     var denLabel = hasReach() ? '도달' : '조회';
     var all = postsIn(state.month);
     var fresh = all.filter(function (p) { return daysSince(p.date) < FRESH_DAYS; });
-    var list = all.filter(function (p) { return daysSince(p.date) >= FRESH_DAYS && base(p.values) > 0; })
-      .map(function (p) { return { p: p, num: B.num(p.values), den: base(p.values), rate: B.num(p.values) / base(p.values) * 100 }; })
-      .sort(function (a, b) { return b.rate - a.rate || b.num - a.num; });
-    var sumN = list.reduce(function (a, x) { return a + x.num; }, 0), sumD = list.reduce(function (a, x) { return a + x.den; }, 0);
-    var avg = sumD ? sumN / sumD * 100 : 0;
+    var isTotal = state.basis === 'total';
+    var eligible = all.filter(function (p) { return daysSince(p.date) >= FRESH_DAYS && base(p.values) > 0; });
+    var list, avg, sumD = eligible.reduce(function (a, p) { return a + base(p.values); }, 0);
+    if (isTotal) {
+      // 지표별 기간 평균(합계 기준) → 게시물마다 평균 대비 배수 → 가중 합
+      var avgs = {};
+      ['link', 'follow', 'engage'].forEach(function (k) {
+        var n = eligible.reduce(function (a, p) { return a + BASIS[k].num(p.values); }, 0);
+        avgs[k] = sumD ? n / sumD : 0;
+      });
+      list = eligible.map(function (p) {
+        var idx = {}, score = 0;
+        ['link', 'follow', 'engage'].forEach(function (k) {
+          var r = BASIS[k].num(p.values) / base(p.values);
+          idx[k] = avgs[k] ? r / avgs[k] : 1;
+          score += TOTAL_W[k] * Math.min(idx[k], TOTAL_CAP);
+        });
+        return { p: p, idx: idx, rate: score, num: score, den: base(p.values) };
+      });
+      avg = 1;
+    } else {
+      list = eligible.map(function (p) { return { p: p, num: B.num(p.values), den: base(p.values), rate: B.num(p.values) / base(p.values) * 100 }; });
+      var sumN = list.reduce(function (a, x) { return a + x.num; }, 0);
+      avg = sumD ? sumN / sumD * 100 : 0;
+    }
+    list.sort(function (a, b) { return b.rate - a.rate || b.den - a.den; });
 
     // 평균이 10명 이상 되는 가장 작은 기준(100 / 1,000 / 1만 명)으로 정수 표기
     var unit = [100, 1000, 10000].filter(function (u) { return avg / 100 * u >= 10; })[0] || 10000;
     var unitTxt = unit === 100 ? '100명' : unit === 1000 ? '1,000명' : '1만 명';
     function people(rate) { return fmt(rate / 100 * unit); }
 
-    var note = periodLabel() + ' · ' + denLabel + ' ' + unitTxt + '에게 보여줬을 때 몇 명이 ' + B.act.replace('어요', '는지') + ' 비교';
+    var note = isTotal
+      ? periodLabel() + ' · 링크 50% + 팔로우 30% + 반응 20%를 평균 대비 배수로 합친 점수 (평균 = 1.0, 지표당 최대 3배)'
+      : periodLabel() + ' · ' + denLabel + ' ' + unitTxt + '에게 보여줬을 때 몇 명이 ' + B.act.replace('어요', '는지') + ' 비교';
     if (fresh.length) note += ' · 올린 지 ' + FRESH_DAYS + '일 안 된 ' + fresh.length + '건 제외';
     $('eff-note').textContent = note;
 
@@ -1488,7 +1533,7 @@ window.DASHBOARD_CONFIG = {
 
     // 단계별 평균: 1위의 '왜'를 설명할 때 비교 대상
     var tot = { den: sumD, profile: 0, out: 0 };
-    list.forEach(function (x) { tot.profile += x.p.values.profile; tot.out += B.steps.length > 1 ? stepVal(x.p.values, B.steps[1].k) : x.num; });
+    if (!isTotal) list.forEach(function (x) { tot.profile += x.p.values.profile; tot.out += B.steps.length > 1 ? stepVal(x.p.values, B.steps[1].k) : x.num; });
     var avg1 = tot.den ? tot.profile / tot.den * 100 : 0, avg2 = tot.profile ? tot.out / tot.profile * 100 : 0;
     function reason(x, good) {
       var v = x.p.values;
@@ -1519,25 +1564,52 @@ window.DASHBOARD_CONFIG = {
         ? '<button type="button" class="title-btn eff-title" data-row="' + p.row + '" title="' + esc(p.title) + '">' + esc(p.title) + '</button>'
         : '<span class="eff-title" title="' + esc(p.title) + '">' + esc(p.title) + '</span>';
     }
-    function hero(x, good) {
-      var p = x.p, ratio = avg ? x.rate / avg : 0;
+    // 성과 상세: 1위는 항상 보이고, 2·3위는 펼쳤을 때 보임
+    function detail(x, good) {
+      if (isTotal) {
+        var sc = x.rate;
+        var head = sc >= 1
+          ? '평균보다 <strong>' + fmt1(sc) + '배</strong> 효율이 좋았어요'
+          : '평균의 <strong>' + Math.round(sc * 100) + '%</strong> 수준이에요';
+        var chips = [['link', '링크'], ['follow', '팔로우'], ['engage', '반응']].map(function (k) {
+          var v = x.idx[k[0]];
+          return '<span class="ix ' + (v >= 1 ? 'up' : 'down') + '">' + k[1] + ' ' + (v >= 10 ? fmt(v) : fmt1(v)) + '배</span>';
+        }).join('');
+        return '<p class="eh-headline">' + head + ' <span class="eff-badge">종합 ' + sc.toFixed(2) + '점</span></p>' +
+          '<div class="eff-compare" role="img" aria-label="이 게시물 ' + sc.toFixed(2) + '점, 평균 1.00점">' +
+            '<span>이 게시물</span><span class="cbar"><i class="me" style="width:' + Math.max(sc / barMax * 100, 1.5) + '%"></i></span><b>' + sc.toFixed(2) + '</b>' +
+            '<span>평균</span><span class="cbar"><i class="avg" style="width:' + (1 / barMax * 100) + '%"></i></span><b class="muted">1.00</b>' +
+          '</div>' +
+          '<p class="ix-row" title="각 지표가 이 기간 평균의 몇 배인지">' + chips + '</p>';
+      }
+      var ratio = avg ? x.rate / avg : 0;
       var badge = !avg ? '' : ratio >= 1 ? '평균의 ' + fmt1(ratio) + '배' : '평균의 ' + Math.round(ratio * 100) + '%';
-      return '<div class="eh">' +
-        '<div class="eh-top"><span class="eff-rank">1</span>' + titleOf(p) + tagOf(p) + '<span class="eff-date">' + D.fmtDate(p.date) + '</span></div>' +
-        '<p class="eh-headline">' + unitTxt + ' 중 <strong>' + people(x.rate) + '명</strong>이 ' + B.act + (badge ? ' <span class="eff-badge">' + badge + '</span>' : '') + '</p>' +
+      return '<p class="eh-headline">' + unitTxt + ' 중 <strong>' + people(x.rate) + '명</strong>이 ' + B.act + (badge ? ' <span class="eff-badge">' + badge + '</span>' : '') + '</p>' +
         '<div class="eff-compare" role="img" aria-label="이 게시물 ' + people(x.rate) + '명, 평균 ' + people(avg) + '명">' +
           '<span>이 게시물</span><span class="cbar"><i class="me" style="width:' + Math.max(x.rate / barMax * 100, 1.5) + '%"></i></span><b>' + people(x.rate) + '명</b>' +
           '<span>평균</span><span class="cbar"><i class="avg" style="width:' + (avg / barMax * 100) + '%"></i></span><b class="muted">' + people(avg) + '명</b>' +
         '</div>' +
-        '<p class="eff-reason">' + (good ? '✓ ' : '✕ ') + reason(x, good) + '</p>' +
-        '</div>';
+        '<p class="eff-reason">' + (good ? '✓ ' : '✕ ') + reason(x, good) + '</p>';
     }
-    function row(x, i) {
-      return '<li><span class="eff-rank">' + (i + 2) + '</span>' + titleOf(x.p) + tagOf(x.p) + '<b class="er-num">' + people(x.rate) + '명</b></li>';
+    function hero(x, good) {
+      var p = x.p;
+      return '<div class="eh">' +
+        '<div class="eh-top"><span class="eff-rank">1</span>' + titleOf(p) + tagOf(p) + '<span class="eff-date">' + D.fmtDate(p.date) + '</span></div>' +
+        detail(x, good) + '</div>';
+    }
+    function row(x, i, good) {
+      var p = x.p;
+      return '<li><details class="er">' +
+        '<summary><span class="eff-rank">' + (i + 2) + '</span><span class="eff-title" title="' + esc(p.title) + '">' + esc(p.title) + '</span>' + tagOf(p) +
+          '<span class="er-more"><span class="o">성과 보기</span><span class="c">접기</span></span></summary>' +
+        '<div class="er-body">' + detail(x, good) +
+          '<div class="er-foot"><span class="eff-date">' + D.fmtDate(p.date) + ' 게시</span>' +
+          (p.url ? '<button type="button" class="btn btn-sm dot-btn" data-row="' + p.row + '">게시물 미리보기</button>' : '') + '</div>' +
+        '</div></details></li>';
     }
     function block(arr, good) {
       if (!arr.length) return '<p class="eff-empty">비교할 게시물이 2건 이상 있어야 보여 드려요.</p>';
-      return hero(arr[0], good) + (arr.length > 1 ? '<ol class="er-list">' + arr.slice(1).map(row).join('') + '</ol>' : '');
+      return hero(arr[0], good) + (arr.length > 1 ? '<ol class="er-list">' + arr.slice(1).map(function (x, i) { return row(x, i, good); }).join('') + '</ol>' : '');
     }
     $('eff-top').innerHTML = block(top, true);
     $('eff-low').innerHTML = block(low, false);
@@ -1580,9 +1652,20 @@ window.DASHBOARD_CONFIG = {
     var lu = types.filter(function (t) { return t.label === '공구 라인업'; })[0], mk = types.filter(function (t) { return t.label === '인플루언서 마켓'; })[0];
     var ins = [];
     if (lu && mk) {
-      if (mk.follow === 0 && lu.follow > 0) ins.push('<b>팔로우</b>: <em>공구 라인업</em>이 확실히 강해요. 마켓은 보통 게시물의 팔로우가 0명이에요');
-      else if (lu.follow && mk.follow) ins.push('<b>팔로우</b>: ' + (lu.follow >= mk.follow ? '<em>공구 라인업</em>이 마켓의 ' + fmt1(lu.follow / mk.follow) + '배' : '<em>인플루언서 마켓</em>이 라인업의 ' + fmt1(mk.follow / lu.follow) + '배'));
-      if (lu.link != null && mk.link != null) ins.push('<b>링크</b>: 보통 게시물은 ' + (lu.link >= mk.link ? '<em>공구 라인업</em>' : '<em>인플루언서 마켓</em>') + '이 높지만, 마켓은 게시물마다 ' + fmt1(mk.linkMin) + '~' + fmt1(mk.linkMax) + '%로 <b>브랜드에 따라 차이가 커요</b> (아래 브랜드별 참고)');
+      // 팔로우
+      if (lu.follow > 0 && !mk.follow) ins.push('팔로워를 늘리려면 <em>공구 라인업</em>이 효과적이에요. 마켓 게시물은 대부분 팔로우로 이어지지 않았어요');
+      else if (lu.follow && mk.follow) {
+        var fr = lu.follow / mk.follow;
+        if (fr >= 1.3) ins.push('팔로워를 늘리려면 <em>공구 라인업</em>이 마켓보다 ' + fmt1(fr) + '배 효과적이에요');
+        else if (fr <= 1 / 1.3) ins.push('팔로워를 늘리려면 <em>인플루언서 마켓</em>이 라인업보다 ' + fmt1(1 / fr) + '배 효과적이에요');
+        else ins.push('팔로우 전환은 라인업과 마켓이 비슷해요');
+      }
+      // 링크
+      if (lu.link != null && mk.link != null) {
+        var leader = lu.link >= mk.link ? '공구 라인업' : '인플루언서 마켓';
+        var spread = mk.linkMax - mk.linkMin >= 5;
+        ins.push('링크 클릭은 보통 <em>' + leader + '</em>이 더 잘 나와요' + (spread ? '. 다만 마켓은 브랜드에 따라 결과가 크게 갈려요' : ''));
+      }
     }
     $('plan-types-insight').innerHTML = ins.map(function (t) { return '<span>' + t + '</span>'; }).join('');
 
@@ -1618,6 +1701,13 @@ window.DASHBOARD_CONFIG = {
     var bl = Object.keys(br).map(function (k) { return { k: k, n: br[k].length, rate: rateOf(br[k], 'link') }; })
       .sort(function (a, b) { return b.rate - a.rate; });
     var bmax = bl.length ? bl[0].rate || 1 : 1;
+    // 게시물이 2건 이상인 브랜드를 우선 비교 (1건짜리는 우연일 수 있어서)
+    var solid = bl.filter(function (x) { return x.n >= 2; });
+    var pool2 = solid.length >= 2 ? solid : bl;
+    var bTop = pool2[0], bLow = pool2.length > 1 ? pool2[pool2.length - 1] : null;
+    $('plan-brands-insight').innerHTML = bTop && bLow && bTop.rate > bLow.rate * 2
+      ? '<em>' + esc(bTop.k) + '</em> 마켓의 링크 전환이 가장 높고(' + fmt1(bTop.rate) + '%, ' + bTop.n + '건), <em>' + esc(bLow.k) + '</em>는 ' + bLow.n + '건 평균 ' + fmt1(bLow.rate) + '%로 꾸준히 낮아요'
+      : '';
     $('plan-brands').innerHTML = bl.length ? bl.map(function (b) {
       return '<li><span>' + esc(b.k) + ' <small>' + b.n + '건</small></span><span class="bar"><i style="width:' + Math.max(b.rate / bmax * 100, 2) + '%"></i></span><b>' + fmt1(b.rate) + '%</b></li>';
     }).join('') : '<li class="muted">브랜드 마켓 게시물이 없어요</li>';
