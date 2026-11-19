@@ -499,9 +499,6 @@ body.modal-open { overflow: hidden; }
         <p id="source-line" class="live muted small"><span class="live-dot" aria-hidden="true"></span><span>데이터를 불러오는 중…</span></p>
         <label class="sr-only" for="month-select">기간</label>
         <select id="month-select" class="select"></select>
-        <button id="btn-refresh" class="btn" type="button">새로고침</button>
-        <label class="btn" for="file-input-top">CSV 업로드</label>
-        <input id="file-input-top" class="sr-only" type="file" accept=".csv,text/csv">
       </div>
     </header>
 
@@ -1196,8 +1193,8 @@ window.DASHBOARD_CONFIG = {
       showUpload('아직 구글 시트 CSV 링크가 설정되지 않았습니다. config의 SHEET_CSV_URL에 링크를 넣으면 시트 데이터가 자동으로 표시됩니다. 지금은 CSV 파일을 직접 올려서 볼 수 있습니다.');
       return Promise.resolve();
     }
-    var btn = $('btn-refresh');
-    btn.classList.add('is-loading'); btn.disabled = true;
+    var btn = $('btn-refresh');   // 버튼이 없으면 그냥 건너뜀
+    if (btn) { btn.classList.add('is-loading'); btn.disabled = true; }
     var bust = url + (url.indexOf('?') === -1 ? '?' : '&') + '_=' + Date.now(); // 캐시 방지
 
     return fetch(bust, { cache: 'no-store', redirect: 'follow' })
@@ -1231,7 +1228,7 @@ window.DASHBOARD_CONFIG = {
         }
         console.error('[대시보드] 시트 불러오기 실패:', err);
       })
-      .then(function () { btn.classList.remove('is-loading'); btn.disabled = false; });
+      .then(function () { if (btn) { btn.classList.remove('is-loading'); btn.disabled = false; } });
   }
 
   function explainError(err) {
@@ -1422,7 +1419,7 @@ window.DASHBOARD_CONFIG = {
     ];
 
     $('kpis').innerHTML = cards.map(function (c) {
-      return '<div class="kpi' + (c.hero ? ' hero' : '') + '">' +
+      return '<div class="kpi">' +
         '<div class="kpi-label">' + esc(c.label) + '</div>' +
         '<div class="kpi-value">' + c.value + '</div>' +
         '<div class="kpi-foot">' + c.foot + '</div>' +
@@ -2010,11 +2007,11 @@ window.DASHBOARD_CONFIG = {
     thead.addEventListener('keydown', sortBy);
     $('search').addEventListener('input', function (e) { state.query = e.target.value.trim(); renderTable(); });
 
-    $('btn-refresh').addEventListener('click', function () {
+    if ($('btn-refresh')) $('btn-refresh').addEventListener('click', function () {
       if (normalizeUrl(CFG.SHEET_CSV_URL)) loadFromSheet(false);
       else showUpload('구글 시트 링크가 설정되지 않아 새로고침할 곳이 없습니다. CSV 파일을 올려 주세요.');
     });
-    ['file-input', 'file-input-top'].forEach(function (id) {
+    ['file-input', 'file-input-top'].filter(function (id) { return $(id); }).forEach(function (id) {
       $(id).addEventListener('change', function (e) { loadFromFile(e.target.files[0]); e.target.value = ''; });
     });
     var dz = $('dropzone');
