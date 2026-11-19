@@ -254,6 +254,15 @@ button, input, select { font: inherit; color: inherit; }
 .ix { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--card); font-variant-numeric: tabular-nums; }
 .ix.up { color: var(--good); }
 .ix.down { color: var(--bad); }
+.gauge-wrap { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 14px; align-items: center; margin-top: 10px; }
+.gauge { width: 150px; height: auto; display: block; overflow: visible; }
+.gauge .g-val { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; font-family: var(--font); }
+.gauge .g-sub { font-size: 9.5px; fill: var(--muted); font-family: var(--font); }
+.gauge .g-avg { font-size: 9px; fill: var(--muted); font-family: var(--font); }
+.gauge-side { display: grid; gap: 10px; min-width: 0; }
+.gauge-side .eff-reason { font-size: 13.5px; }
+.er-body .gauge-wrap { grid-template-columns: 120px minmax(0, 1fr); }
+.er-body .gauge { width: 120px; }
 .raw-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; background: var(--card); border-radius: 8px; padding: 8px 12px; }
 .raw-row span { display: inline-flex; align-items: baseline; gap: 5px; }
 .raw-row em { font-style: normal; font-size: 11.5px; color: var(--muted); }
@@ -437,12 +446,60 @@ body.modal-open { overflow: hidden; }
 
 .footer { text-align: center; padding-top: 8px; padding-bottom: 32px; }
 
+/* ---------- 메인 페이지 방식: 짧은 캡션 · 숫자 카드 · 순위 목록 ---------- */
+.cap { font-size: 12px; color: var(--muted); }
+.section-head .cap { flex: 0 1 auto; }
+section > .card + .grid-2-1, .stat-grid + .grid-2-1 { margin-top: 12px; }
+.stat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; display: grid; gap: 4px; min-width: 0; }
+.stat-label { font-size: 12.5px; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.stat-label i, .card-title i.dot { width: 9px; height: 9px; border-radius: 3px; display: inline-block; flex: none; }
+.stat-value { font-size: 24px; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.stat-sub { font-size: 12px; color: var(--faint); }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.card-title { display: flex; align-items: center; gap: 7px; }
+.card-title i.dot.good { background: var(--good); }
+.card-title i.dot.bad { background: var(--bad); }
+.chart-card .cap { margin-top: -2px; }
+.chart-card .legend { margin-top: 6px; }
+.chart-card .legend.vertical { margin-top: 14px; }
+.rank-list { list-style: none; margin: 10px 0 0; padding: 0; }
+.rank-list li { display: grid; grid-template-columns: 22px minmax(0, 1fr) 52px; gap: 10px; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); }
+.rank-list li:first-child { border-top: 0; }
+.rk-no { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; font-weight: 800; background: var(--soft); color: var(--muted); }
+.rank-card.good li.first .rk-no { background: var(--good); color: #fff; }
+.rank-card.bad li.first .rk-no { background: var(--bad); color: #fff; }
+.rk-main { min-width: 0; display: grid; gap: 6px; }
+.rk-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.rk-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; }
+.rank-list li.first .rk-title { font-weight: 700; }
+.rank-list li:not(.first) .rk-title { font-weight: 500; }
+.rk-bar { position: relative; height: 8px; border-radius: 4px; background: var(--soft); }
+.rk-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
+.rank-card.good .rk-bar i { background: var(--good); }
+.rank-card.bad .rk-bar i { background: var(--bad); }
+.rk-bar b { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--faint); border-radius: 1px; }
+.rk-val { text-align: right; font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; }
+.rank-card.good .rk-val { color: var(--good); }
+.rank-card.bad .rk-val { color: var(--bad); }
+.rank-list li.first .rk-val { font-size: 18px; }
+.rk-empty { display: block !important; color: var(--muted); font-size: 13px; }
+
+.tips { padding: 18px 20px; }
+.tips-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.tips-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 24px; }
+.tips-list li { display: flex; gap: 10px; align-items: flex-start; }
+.tip-tag { flex: none; min-width: 48px; text-align: center; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: var(--pri-soft); color: var(--pri); margin-top: 1px; }
+.tips-list p { font-size: 13.5px; font-weight: 600; line-height: 1.5; }
+.tips-list em { font-style: normal; color: var(--pri); }
+
 /* ---------- 반응형 ---------- */
 @media (max-width: 1100px) {
   .kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
-  .grid-2-1, .eff-grid { grid-template-columns: 1fr; }
+  .grid-2-1, .eff-grid, .grid-2, .tips-list { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
   .donut-wrap { grid-template-columns: 200px 1fr; align-items: center; }
 }
 @media (max-width: 720px) {
@@ -463,12 +520,15 @@ body.modal-open { overflow: hidden; }
   .toolbar .btn { flex: 1; justify-content: center; }
   .main, #content { gap: 22px; }
   .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .stat-grid { grid-template-columns: 1fr; gap: 8px; }
   .kpi { padding: 13px 13px 10px; }
   .kpi-value { font-size: 22px; }
   .card { padding: 16px; }
   .section-head .segmented { margin-left: 0; width: 100%; }
   .chart-box { height: 230px; }
   .et-picks { grid-template-columns: 1fr; }
+  .gauge-wrap, .er-body .gauge-wrap { grid-template-columns: 1fr; justify-items: center; }
+  .gauge-side { width: 100%; }
 
   .donut-wrap { grid-template-columns: 1fr; }
   .search input { width: 100%; }
@@ -544,11 +604,11 @@ body.modal-open { overflow: hidden; }
           <div id="kpis" class="kpi-grid"></div>
         </section>
 
-        <!-- 고효율 · 저효율 콘텐츠 -->
+        <!-- 고효율 · 저효율 -->
         <section aria-labelledby="eff-title">
           <div class="section-head">
             <h2 id="eff-title">고효율 · 저효율 콘텐츠</h2>
-            <p id="eff-note" class="muted small"></p>
+            <p class="cap" id="eff-note"></p>
             <div id="eff-basis" class="segmented" role="tablist" aria-label="효율 기준"></div>
           </div>
           <div class="eff-grid">
@@ -563,43 +623,54 @@ body.modal-open { overflow: hidden; }
           </div>
         </section>
 
-        <!-- 추이 -->
+        <!-- 다음 콘텐츠 기획 참고 (간단) -->
+        <section class="card tips" aria-labelledby="tips-title">
+          <div class="tips-head">
+            <h3 id="tips-title" class="card-title">다음 콘텐츠 기획 참고</h3>
+            <span id="tips-note" class="cap"></span>
+          </div>
+          <ul id="tips" class="tips-list"></ul>
+        </section>
+
+        <!-- 월별 추이 -->
         <section aria-labelledby="trend-title">
           <div class="section-head">
             <h2 id="trend-title">월별 추이</h2>
-            <p class="muted small">선택한 달은 아래 글자가 굵게 · 오른쪽은 전체 기간 기준</p>
+            <p class="cap">막대: 조회수 · 도달</p>
           </div>
+          <article class="card chart-card">
+            <div class="legend" id="legend-monthly"></div>
+            <div class="chart-box tall"><canvas id="chart-monthly" role="img" aria-label="월별 조회수와 도달 막대 차트"></canvas></div>
+          </article>
+        </section>
+
+        <!-- 콘텐츠 종류별 비교 -->
+        <section aria-labelledby="type-title">
+          <div class="section-head">
+            <h2 id="type-title">콘텐츠 종류별 비교</h2>
+            <p class="cap">공구 라인업 · 인플루언서 마켓</p>
+          </div>
+          <div id="type-cards" class="stat-grid"></div>
           <div class="grid-2-1">
             <article class="card chart-card">
-              <div class="legend" id="legend-monthly"></div>
-              <div class="chart-box"><canvas id="chart-monthly" role="img" aria-label="월별 조회수와 도달 막대 차트"></canvas></div>
+              <h3 class="card-title">라인업 vs 마켓 월별 링크 클릭</h3>
+              <div class="legend" id="legend-types"></div>
+              <div class="chart-box"><canvas id="chart-types" role="img" aria-label="종류별 월별 링크 클릭 막대 차트"></canvas></div>
             </article>
-            <article class="card plan" aria-labelledby="plan-title">
-              <h3 id="plan-title" class="card-title">다음 콘텐츠 기획 참고</h3>
-              <p id="plan-note" class="muted small"></p>
-              <div class="plan-block">
-                <p class="plan-label">게시물 종류별 강점</p>
-                <table id="plan-types" class="plan-table"></table>
-                <p id="plan-types-insight" class="plan-insight"></p>
+            <article class="card chart-card">
+              <h3 class="card-title">링크 클릭 비중</h3>
+              <div class="chart-box donut"><canvas id="chart-donut" role="img" aria-label="종류별 링크 클릭 도넛 차트"></canvas>
+                <div class="donut-center"><span>링크 클릭</span><b id="donut-total"></b></div>
               </div>
-              <div class="plan-block">
-                <p class="plan-label">올린 요일별 링크 전환</p>
-                <div class="chart-box mini"><canvas id="chart-weekday" role="img" aria-label="요일별 링크 전환 막대 차트"></canvas></div>
-                <p id="plan-weekday" class="plan-insight"></p>
-              </div>
-              <div class="plan-block">
-                <p class="plan-label">브랜드별 링크 전환</p>
-                <ul id="plan-brands" class="plan-brands"></ul>
-                <p id="plan-brands-insight" class="plan-insight"></p>
-              </div>
+              <div class="legend vertical" id="legend-donut"></div>
             </article>
           </div>
         </section>
 
+        <!-- 전환 · 브랜드 -->
         <section aria-labelledby="conv-title">
           <div class="section-head">
-            <h2 id="conv-title">전환 · 콘텐츠 종류</h2>
-            <p class="muted small">비율이 오르면 같은 노출로 더 많이 팔고, 더 많이 키운다는 뜻</p>
+            <h2 id="conv-title">전환 · 브랜드</h2>
           </div>
           <div class="grid-2-1">
             <article class="card chart-card">
@@ -608,32 +679,9 @@ body.modal-open { overflow: hidden; }
               <div class="chart-box"><canvas id="chart-rates" role="img" aria-label="월별 전환율 꺾은선 차트"></canvas></div>
             </article>
             <article class="card chart-card">
-              <h3 class="card-title">링크 클릭은 어디서 나왔나</h3>
-              <p class="muted small">게시물 종류별 링크 클릭 비중</p>
-              <div class="donut-wrap">
-                <div class="chart-box donut"><canvas id="chart-donut" role="img" aria-label="게시물 종류별 링크 클릭 도넛 차트"></canvas>
-                  <div class="donut-center"><span>링크 클릭</span><b id="donut-total"></b></div>
-                </div>
-                <div class="legend vertical" id="legend-donut"></div>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section aria-labelledby="brand-title">
-          <div class="section-head">
-            <h2 id="brand-title">브랜드 · 반응</h2>
-          </div>
-          <div class="grid-2-1">
-            <article class="card chart-card">
-              <h3 class="card-title">브랜드별 링크 클릭</h3>
-              <p class="muted small">인플루언서 마켓 게시물 1건당 평균</p>
-              <div class="chart-box tall"><canvas id="chart-brands" role="img" aria-label="브랜드별 평균 링크 클릭 가로 막대 차트"></canvas></div>
-            </article>
-            <article class="card chart-card">
-              <h3 class="card-title">반응 구성</h3>
-              <p class="muted small">저장·공유는 알고리즘이 확산에 반영하는 신호</p>
-              <div class="chart-box tall"><canvas id="chart-engage" role="img" aria-label="반응 종류별 합계 가로 막대 차트"></canvas></div>
+              <h3 class="card-title">브랜드별 링크 전환</h3>
+              <p class="cap">전체 기간 · 도달 대비</p>
+              <div class="chart-box"><canvas id="chart-brands" role="img" aria-label="브랜드별 링크 전환 가로 막대 차트"></canvas></div>
             </article>
           </div>
         </section>
@@ -1364,10 +1412,14 @@ window.DASHBOARD_CONFIG = {
   function render() {
     renderHeader();
     renderKpis();
+    if (typeof Chart !== 'undefined') Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+    else showStatus('warn', '차트 도구를 불러오지 못했습니다', '새로고침해 주세요. 숫자 카드와 표는 정상입니다.');
+    renderMonthly();
+    renderTypes();
     renderEfficiency();
-    renderCharts();
-    renderPlan();
-    renderFunnel();
+    renderTips();
+    renderRates();
+    renderBrands();
     renderTable();
     renderVerify();
   }
@@ -1451,10 +1503,9 @@ window.DASHBOARD_CONFIG = {
     }).join('');
   }
 
-  /* ---------- 고효율 · 저효율 콘텐츠 ---------- */
-  // 효율 기준마다 '도달 → … → 결과' 단계를 정의
-  // 종합 점수: 지표별 '평균 대비 배수'를 가중 평균 (지표당 최대 3배까지만 반영)
+  /* ---------- 공통 계산 ---------- */
   var TOTAL_W = { link: 0.5, follow: 0.3, engage: 0.2 }, TOTAL_CAP = 3;
+  function engage(v) { return v.likes + v.saves + v.shares + v.comments; }
   var BASIS = {
     total:  { tab: '종합', act: '', what: '', desc: '' },
     link:   { tab: '링크 전환', act: '링크를 눌렀어요', what: '링크 클릭', whatRo: '링크 클릭으로', step2: '링크 연결', short: '클릭', desc: '대비 링크 클릭',
@@ -1474,21 +1525,126 @@ window.DASHBOARD_CONFIG = {
     var c = word.charCodeAt(word.length - 1);
     return c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 ? '이' : '가';
   }
+  var TYPES = [
+    { key: '주간 공구 라인업', label: '공구 라인업', color: '--pri', cls: 'lineup' },
+    { key: '인플루언서 마켓', label: '인플루언서 마켓', color: '--link', cls: 'market' }
+  ];
   function median(arr) {
     if (!arr.length) return 0;
     var a = arr.slice().sort(function (x, y) { return x - y; }), m = a.length >> 1;
     return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
   }
-  function shortTitle(t) {
-    t = t.replace(/[\u{1F300}-\u{1FAFF}☀-➿]️?/gu, '').replace(/\s+/g, ' ').trim();
-    return t.length > 24 ? t.slice(0, 23) + '…' : t;
+  function tagOf(p) {
+    return p.brand ? '<span class="tag market">' + esc(p.brand) + '</span>'
+      : p.group === '주간 공구 라인업' ? '<span class="tag lineup">라인업</span>' : '<span class="tag">' + esc(p.group) + '</span>';
   }
-  var TYPES = [
-    { key: '주간 공구 라인업', label: '공구 라인업', cls: 'lineup', role: '이번 주 공구를 한 번에 안내' },
-    { key: '인플루언서 마켓', label: '인플루언서 마켓', cls: 'market', role: '한 브랜드 판매' }
-  ];
 
-  // 고효율 / 저효율: 1위는 크게(이유까지), 2·3위는 한 줄로
+  /* ---------- 차트 공통 ---------- */
+  function baseOptions(extra) {
+    var muted = cssVar('--muted'), line = cssVar('--line');
+    var o = {
+      responsive: true, maintainAspectRatio: false, animation: { duration: 350 },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: cssVar('--text'), titleColor: cssVar('--card'), bodyColor: cssVar('--card'),
+          padding: 10, cornerRadius: 8, boxPadding: 4,
+          callbacks: { label: function (c) { return ' ' + (c.dataset.label ? c.dataset.label + ': ' : '') + fmt1(c.parsed[c.chart.options.indexAxis === 'y' ? 'x' : 'y']); } }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, border: { color: line }, ticks: { color: muted, font: { size: 12 } } },
+        y: { beginAtZero: true, grid: { color: line }, border: { display: false }, ticks: { color: muted, font: { size: 12 }, maxTicksLimit: 5, callback: function (v) { return fmt(v); } } }
+      }
+    };
+    return deepMerge(o, extra || {});
+  }
+  function deepMerge(a, b) {
+    Object.keys(b).forEach(function (k) {
+      if (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k]) && typeof b[k] !== 'function' && a[k] && typeof a[k] === 'object') deepMerge(a[k], b[k]);
+      else a[k] = b[k];
+    });
+    return a;
+  }
+  function draw(id, config) {
+    if (typeof Chart === 'undefined') return;
+    if (state.charts[id]) state.charts[id].destroy();
+    state.charts[id] = new Chart($(id), config);
+  }
+  function legendHtml(items) {
+    return items.map(function (it) {
+      return '<span><i style="background:' + it.color + '"></i><em>' + esc(it.label) + '</em>' + (it.value != null ? '<b>' + it.value + '</b>' : '') + '</span>';
+    }).join('');
+  }
+  function monthAxis() {
+    var months = monthsOf(validPosts()), now = nowMonthKey();
+    return {
+      months: months,
+      labels: months.map(function (m) { return monthLabel(m) + (m === now ? ' (진행 중)' : ''); }),
+      ticks: {   // 선택한 달은 x축 글자를 굵게
+        color: function (c) { return state.month !== 'all' && months[c.index] === state.month ? cssVar('--text') : cssVar('--muted'); },
+        font: function (c) { return { size: 12, weight: state.month !== 'all' && months[c.index] === state.month ? '700' : '400' }; }
+      }
+    };
+  }
+
+  /* ---------- 월별 추이 ---------- */
+  function renderMonthly() {
+    var ax = monthAxis(), C = { pri: cssVar('--pri'), reach: cssVar('--reach') };
+    var sums = ax.months.map(function (m) { return D.sumPosts(postsIn(m)); });
+    var ds = [{ label: '조회수', data: sums.map(function (s) { return s.views; }), backgroundColor: C.pri, borderRadius: 4, borderSkipped: 'bottom', maxBarThickness: 30 }];
+    if (hasReach()) ds.push({ label: '도달', data: sums.map(function (s) { return s.reach; }), backgroundColor: C.reach, borderRadius: 4, borderSkipped: 'bottom', maxBarThickness: 30 });
+    $('legend-monthly').innerHTML = legendHtml(ds.map(function (d) { return { label: d.label, color: d.backgroundColor }; }));
+    draw('chart-monthly', { type: 'bar', data: { labels: ax.labels, datasets: ds },
+      options: baseOptions({ datasets: { bar: { categoryPercentage: 0.6, barPercentage: 0.9 } }, scales: { x: { ticks: ax.ticks } } }) });
+  }
+
+  /* ---------- 콘텐츠 종류별 비교: 숫자 카드 + 월별 막대 + 도넛 ---------- */
+  function renderTypes() {
+    var cur = postsIn(state.month);
+    var cards = TYPES.map(function (T) {
+      var l = cur.filter(function (p) { return p.group === T.key; }), t = D.sumPosts(l);
+      var den = l.reduce(function (a, p) { return a + base(p.values); }, 0);
+      return { T: T, n: l.length, link: t.link, follows: t.follows, rate: den ? t.link / den * 100 : 0 };
+    });
+    var total = cards.reduce(function (a, c) { return a + c.link; }, 0);
+    $('type-cards').innerHTML = cards.map(function (c) {
+      return '<div class="stat"><div class="stat-label"><i style="background:var(' + c.T.color + ')"></i>' + c.T.label + ' 링크 클릭</div>' +
+        '<div class="stat-value">' + fmt(c.link) + '</div>' +
+        '<div class="stat-sub">게시물 ' + c.n + '건 · 팔로우 ' + fmt(c.follows) + ' · 링크 전환 ' + fmt1(c.rate) + '%</div></div>';
+    }).join('') +
+      '<div class="stat"><div class="stat-label"><i style="background:var(--follow)"></i>두 종류 합계</div>' +
+      '<div class="stat-value">' + fmt(total) + '</div>' +
+      '<div class="stat-sub">' + periodLabel() + ' 링크 클릭 전체</div></div>';
+
+    if (typeof Chart === 'undefined') return;
+    var ax = monthAxis();
+    var ds = TYPES.map(function (T) {
+      return { label: T.label, backgroundColor: cssVar(T.color), borderRadius: 4, borderSkipped: 'bottom', maxBarThickness: 26,
+        data: ax.months.map(function (m) { return D.sumPosts(postsIn(m).filter(function (p) { return p.group === T.key; })).link; }) };
+    });
+    $('legend-types').innerHTML = legendHtml(ds.map(function (d) { return { label: d.label, color: d.backgroundColor }; }));
+    draw('chart-types', { type: 'bar', data: { labels: ax.labels, datasets: ds },
+      options: baseOptions({ datasets: { bar: { categoryPercentage: 0.6, barPercentage: 0.9 } }, scales: { x: { ticks: ax.ticks } } }) });
+
+    var C = cssVar('--card');
+    var parts = cards.filter(function (c) { return c.link > 0; });
+    $('donut-total').textContent = fmt(total);
+    $('legend-donut').innerHTML = legendHtml(cards.map(function (c) {
+      return { label: c.T.label, color: cssVar(c.T.color), value: fmt(c.link) + ' · ' + pct(c.link, total) };
+    }));
+    draw('chart-donut', {
+      type: 'doughnut',
+      data: { labels: parts.map(function (c) { return c.T.label; }), datasets: [{ data: parts.map(function (c) { return c.link; }),
+        backgroundColor: parts.map(function (c) { return cssVar(c.T.color); }), borderColor: C, borderWidth: 2, hoverOffset: 4 }] },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '68%', animation: { duration: 350 },
+        plugins: { legend: { display: false }, tooltip: { backgroundColor: cssVar('--text'), titleColor: C, bodyColor: C, padding: 10, cornerRadius: 8,
+          callbacks: { label: function (c) { return ' ' + fmt(c.parsed) + ' (' + pct(c.parsed, total) + ')'; } } } } }
+    });
+  }
+
+  /* ---------- 고효율 · 저효율: 1위 크게 + 2·3위 펼치기 (텍스트) ---------- */
   function renderEfficiency() {
     $('eff-basis').innerHTML = Object.keys(BASIS).map(function (k) {
       return '<button type="button" role="tab" data-basis="' + k + '" aria-selected="' + (state.basis === k) + '">' + BASIS[k].tab + '</button>';
@@ -1530,9 +1686,9 @@ window.DASHBOARD_CONFIG = {
     function people(rate) { return fmt(rate / 100 * unit); }
 
     var note = isTotal
-      ? periodLabel() + ' · 링크 50% + 팔로우 30% + 반응 20%를 평균 대비 배수로 합친 점수 (평균 = 1.0, 지표당 최대 3배)'
-      : periodLabel() + ' · ' + denLabel + ' ' + unitTxt + '에게 보여줬을 때 몇 명이 ' + B.act.replace('어요', '는지') + ' 비교';
-    if (fresh.length) note += ' · 올린 지 ' + FRESH_DAYS + '일 안 된 ' + fresh.length + '건 제외';
+      ? periodLabel() + ' · 링크 50 · 팔로우 30 · 반응 20'
+      : periodLabel() + ' · ' + denLabel + ' ' + unitTxt + ' 기준';
+    if (fresh.length) note += ' · 최근 ' + FRESH_DAYS + '일 게시물 제외';
     $('eff-note').textContent = note;
 
     var above = list.filter(function (x) { return x.rate >= avg; });
@@ -1641,317 +1797,93 @@ window.DASHBOARD_CONFIG = {
     $('eff-low').innerHTML = block(low, false);
   }
 
-  /* ---------- 다음 콘텐츠 기획 참고 (전체 기간) ---------- */
-  var WEEK = ['일', '월', '화', '수', '목', '금', '토'];
-  function rateOf(list, key) {
-    var den = list.reduce(function (a, p) { return a + base(p.values); }, 0);
-    var num = list.reduce(function (a, p) { return a + stepVal(p.values, key); }, 0);
-    return den ? num / den * 100 : null;
-  }
-  function renderPlan() {
+  /* ---------- 다음 콘텐츠 기획 참고 (전체 기간, 문장 4줄) ---------- */
+  function renderTips() {
     var pool = validPosts().filter(function (p) { return daysSince(p.date) >= FRESH_DAYS && base(p.values) > 0; });
-    var denLabel = hasReach() ? '도달' : '조회';
-    $('plan-note').textContent = '전체 기간 게시물 ' + pool.length + '건 기준 · 비율은 ' + denLabel + ' 대비';
-
-    // (1) 게시물 종류별 강점 — '보통 게시물'(중앙값) 기준: 몇 개 대박 게시물에 끌려가지 않게
-    function perPost(l, key) { return l.map(function (p) { return base(p.values) ? stepVal(p.values, key) / base(p.values) * 100 : 0; }); }
-    var types = [{ key: '주간 공구 라인업', label: '공구 라인업' }, { key: '인플루언서 마켓', label: '인플루언서 마켓' }]
-      .map(function (t) {
-        var l = pool.filter(function (p) { return p.group === t.key; });
-        var lr = perPost(l, 'link');
-        return { label: t.label, n: l.length,
-          reach: median(l.map(function (p) { return base(p.values); })),
-          link: l.length ? median(lr) : null, follow: l.length ? median(perPost(l, 'follows')) : null,
-          linkMin: lr.length ? Math.min.apply(null, lr) : 0, linkMax: lr.length ? Math.max.apply(null, lr) : 0 };
-      }).filter(function (t) { return t.n > 0; });
-    var cols = [{ k: 'reach', h: denLabel, f: function (v) { return fmt(v); } },
-                { k: 'link', h: '링크 전환', f: function (v) { return v == null ? '–' : fmt1(v) + '%'; } },
-                { k: 'follow', h: '팔로우 전환', f: function (v) { return v == null ? '–' : fmt1(v) + '%'; } }];
-    var best = {};
-    cols.forEach(function (c) { best[c.k] = Math.max.apply(null, types.map(function (t) { return t[c.k] || 0; })); });
-    $('plan-types').innerHTML = '<thead><tr><th>보통 게시물 기준</th>' + cols.map(function (c) { return '<th>' + c.h + '</th>'; }).join('') + '</tr></thead><tbody>' +
-      types.map(function (t) {
-        return '<tr><td>' + t.label + ' <span class="muted">' + t.n + '건</span></td>' + cols.map(function (c) {
-          return '<td' + (types.length > 1 && t[c.k] === best[c.k] && best[c.k] > 0 ? ' class="win"' : '') + '>' + c.f(t[c.k]) + '</td>';
-        }).join('') + '</tr>';
-      }).join('') + '</tbody>';
-    var lu = types.filter(function (t) { return t.label === '공구 라인업'; })[0], mk = types.filter(function (t) { return t.label === '인플루언서 마켓'; })[0];
-    var ins = [];
-    if (lu && mk) {
-      // 팔로우
-      if (lu.follow > 0 && !mk.follow) ins.push('팔로워를 늘리려면 <em>공구 라인업</em>이 효과적이에요. 마켓 게시물은 대부분 팔로우로 이어지지 않았어요');
-      else if (lu.follow && mk.follow) {
-        var fr = lu.follow / mk.follow;
-        if (fr >= 1.3) ins.push('팔로워를 늘리려면 <em>공구 라인업</em>이 마켓보다 ' + fmt1(fr) + '배 효과적이에요');
-        else if (fr <= 1 / 1.3) ins.push('팔로워를 늘리려면 <em>인플루언서 마켓</em>이 라인업보다 ' + fmt1(1 / fr) + '배 효과적이에요');
-        else ins.push('팔로우 전환은 라인업과 마켓이 비슷해요');
-      }
-      // 링크
-      if (lu.link != null && mk.link != null) {
-        var leader = lu.link >= mk.link ? '공구 라인업' : '인플루언서 마켓';
-        var spread = mk.linkMax - mk.linkMin >= 5;
-        ins.push('링크 클릭은 보통 <em>' + leader + '</em>이 더 잘 나와요' + (spread ? '. 다만 마켓은 브랜드에 따라 결과가 크게 갈려요' : ''));
-      }
+    $('tips-note').textContent = '전체 기간 ' + pool.length + '건 · 보통 게시물 기준';
+    function per(l, k) { return l.map(function (p) { return (k === 'link' ? p.values.link : p.values.follows) / base(p.values) * 100; }); }
+    function rate(l, k) {
+      var d = l.reduce(function (a, p) { return a + base(p.values); }, 0);
+      return d ? l.reduce(function (a, p) { return a + (k === 'link' ? p.values.link : p.values.follows); }, 0) / d * 100 : null;
     }
-    $('plan-types-insight').innerHTML = ins.map(function (t) { return '<span>' + t + '</span>'; }).join('');
+    var lu = pool.filter(function (p) { return p.group === '주간 공구 라인업'; });
+    var mk = pool.filter(function (p) { return p.group === '인플루언서 마켓'; });
+    var tips = [];
 
-    // (2) 요일별 링크 전환
-    var wk = [1, 2, 3, 4, 5, 6, 0].map(function (d) {
+    if (lu.length && mk.length) {
+      var luF = median(per(lu, 'follow')), mkF = median(per(mk, 'follow'));
+      if (luF > 0 && !mkF) tips.push(['팔로우', '팔로워를 늘리려면 <em>공구 라인업</em>이 효과적이에요. 마켓 게시물은 대부분 팔로우로 이어지지 않았어요']);
+      else if (luF && mkF) tips.push(['팔로우', luF >= mkF
+        ? '팔로워를 늘리려면 <em>공구 라인업</em>이 마켓보다 ' + fmt1(luF / mkF) + '배 효과적이에요'
+        : '팔로워를 늘리려면 <em>인플루언서 마켓</em>이 라인업보다 ' + fmt1(mkF / luF) + '배 효과적이에요']);
+      var luL = median(per(lu, 'link')), mkL = median(per(mk, 'link')), mkAll = per(mk, 'link');
+      var spread = Math.max.apply(null, mkAll) - Math.min.apply(null, mkAll) >= 5;
+      tips.push(['링크', '링크 클릭은 보통 <em>' + (luL >= mkL ? '공구 라인업' : '인플루언서 마켓') + '</em>이 더 잘 나와요' +
+        (spread ? '. 다만 마켓은 브랜드에 따라 결과가 크게 갈려요' : '')]);
+    }
+
+    var W = ['일', '월', '화', '수', '목', '금', '토'];
+    var wk = [0, 1, 2, 3, 4, 5, 6].map(function (d) {
       var l = pool.filter(function (p) { return new Date(p.date + 'T00:00:00').getDay() === d; });
-      return { d: d, n: l.length, rate: rateOf(l, 'link') };
-    });
-    var ok = wk.filter(function (w) { return w.n >= 2 && w.rate != null; }).sort(function (a, b) { return b.rate - a.rate; });
-    var bestDay = ok[0];
-    if (typeof Chart !== 'undefined') {
-      var pri = cssVar('--pri'), soft = cssVar('--reach');
-      draw('chart-weekday', {
-        type: 'bar',
-        data: { labels: wk.map(function (w) { return WEEK[w.d]; }),
-          datasets: [{ label: '링크 전환', data: wk.map(function (w) { return w.rate == null ? 0 : Math.round(w.rate * 10) / 10; }),
-            backgroundColor: wk.map(function (w) { return bestDay && w.d === bestDay.d ? pri : soft; }),
-            borderRadius: 3, borderSkipped: 'bottom', maxBarThickness: 22 }] },
-        options: baseOptions({
-          interaction: { mode: 'nearest', intersect: false, axis: 'x' },
-          plugins: { tooltip: { callbacks: { label: function (c) { var w = wk[c.dataIndex]; return ' ' + (w.n ? fmt1(w.rate) + '% · 게시물 ' + w.n + '건' : '게시물 없음'); } } } },
-          scales: { y: { ticks: { maxTicksLimit: 3, callback: function (v) { return v + '%'; } } }, x: { ticks: { font: { size: 11 } } } }
-        })
-      });
-    }
-    $('plan-weekday').innerHTML = bestDay
-      ? '<em>' + WEEK[bestDay.d] + '요일</em>에 올린 게시물의 링크 전환이 가장 높아요 (' + fmt1(bestDay.rate) + '%, ' + bestDay.n + '건)'
-      : '요일을 비교하려면 같은 요일 게시물이 2건 이상 필요해요';
+      return { d: d, n: l.length, r: rate(l, 'link') };
+    }).filter(function (w) { return w.n >= 2 && w.r != null; }).sort(function (a, b) { return b.r - a.r; });
+    if (wk.length) tips.push(['요일', '<em>' + W[wk[0].d] + '요일</em>에 올린 게시물의 링크 전환이 가장 높아요 (' + fmt1(wk[0].r) + '%, ' + wk[0].n + '건)']);
 
-    // (3) 브랜드별 링크 전환
     var br = {};
     pool.filter(function (p) { return p.brand; }).forEach(function (p) { (br[p.brand] = br[p.brand] || []).push(p); });
-    var bl = Object.keys(br).map(function (k) { return { k: k, n: br[k].length, rate: rateOf(br[k], 'link') }; })
-      .sort(function (a, b) { return b.rate - a.rate; });
-    var bmax = bl.length ? bl[0].rate || 1 : 1;
-    // 게시물이 2건 이상인 브랜드를 우선 비교 (1건짜리는 우연일 수 있어서)
-    var solid = bl.filter(function (x) { return x.n >= 2; });
-    var pool2 = solid.length >= 2 ? solid : bl;
-    var bTop = pool2[0], bLow = pool2.length > 1 ? pool2[pool2.length - 1] : null;
-    $('plan-brands-insight').innerHTML = bTop && bLow && bTop.rate > bLow.rate * 2
-      ? '<em>' + esc(bTop.k) + '</em> 마켓의 링크 전환이 가장 높고(' + fmt1(bTop.rate) + '%, ' + bTop.n + '건), <em>' + esc(bLow.k) + '</em>는 ' + bLow.n + '건 평균 ' + fmt1(bLow.rate) + '%로 꾸준히 낮아요'
-      : '';
-    $('plan-brands').innerHTML = bl.length ? bl.map(function (b) {
-      return '<li><span>' + esc(b.k) + ' <small>' + b.n + '건</small></span><span class="bar"><i style="width:' + Math.max(b.rate / bmax * 100, 2) + '%"></i></span><b>' + fmt1(b.rate) + '%</b></li>';
-    }).join('') : '<li class="muted">브랜드 마켓 게시물이 없어요</li>';
+    var bl = Object.keys(br).map(function (k) { return { k: k, n: br[k].length, r: rate(br[k], 'link') }; }).sort(function (a, b) { return b.r - a.r; });
+    var solid = bl.filter(function (b) { return b.n >= 2; });
+    var bp = solid.length >= 2 ? solid : bl;
+    if (bp.length >= 2 && bp[0].r > bp[bp.length - 1].r * 2) {
+      var hi = bp[0], lo = bp[bp.length - 1];
+      tips.push(['브랜드', '<em>' + esc(hi.k) + '</em> 마켓의 링크 전환이 가장 높고(' + fmt1(hi.r) + '%, ' + hi.n + '건), <em>' + esc(lo.k) + '</em>는 ' + lo.n + '건 평균 ' + fmt1(lo.r) + '%로 꾸준히 낮아요']);
+    }
+
+    $('tips').innerHTML = tips.length
+      ? tips.map(function (t) { return '<li><span class="tip-tag">' + t[0] + '</span><p>' + t[1] + '</p></li>'; }).join('')
+      : '<li><p class="muted">게시물이 더 쌓이면 보여 드려요.</p></li>';
   }
 
-  /* ---------- 퍼널 ---------- */
-  // 22,726 → 25,000 / 8,505 → 10,000 처럼 올림한 눈금 값
-  function niceCeil(n) {
-    if (!n || n <= 0) return 1;
-    var p = Math.pow(10, Math.floor(Math.log10(n)));
-    var steps = [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
-    for (var i = 0; i < steps.length; i++) if (steps[i] * p >= n * 1.04) return steps[i] * p;
-    return 10 * p;
-  }
-  function renderFunnel() {
-    if (!$('funnel')) return;   // 퍼널 카드를 화면에서 뺐을 때
-    var t = D.sumPosts(postsIn(state.month));
-    var prevKey = prevMonthKey();
-    var p = prevKey ? D.sumPosts(postsIn(prevKey)) : null;
-    var r1 = t.views ? t.profile / t.views * 100 : 0;      // 조회 → 프로필
-    var r2 = t.profile ? t.link / t.profile * 100 : 0;     // 프로필 → 링크
-    var pr1 = p && p.views ? p.profile / p.views * 100 : null;
-    var pr2 = p && p.profile ? p.link / p.profile * 100 : null;
-    var d1 = pr1 == null ? null : r1 - pr1, d2 = pr2 == null ? null : r2 - pr2;
-    // 지난달보다 가장 많이 떨어진 단계를 빨간색으로 표시
-    var weak = 0;
-    if (d1 != null && d2 != null) {
-      var rel1 = pr1 ? d1 / pr1 : 0, rel2 = pr2 ? d2 / pr2 : 0;
-      if (Math.min(rel1, rel2) < -0.1) weak = rel1 <= rel2 ? 1 : 2;
-    }
-    function dTxt(d) {
-      if (d == null) return '';
-      if (Math.abs(d) < 0.05) return '<small>' + monthLabel(prevKey) + '과 같음</small>';
-      return '<small>' + (d > 0 ? '▲' : '▼') + fmt1(Math.abs(d)) + '%p</small>';
-    }
-    // 비율을 사람 수로 풀어 쓰기: 10% 미만이면 1,000명 기준, 아니면 100명 기준
-    function per(r) { return r < 10 ? '1,000명 중 ' + fmt(r * 10) + '명' : '100명 중 ' + fmt(r) + '명'; }
-    $('funnel-note').textContent = '가운데 숫자는 다음 단계로 넘어간 비율' + (prevKey ? ', ▲▼는 ' + monthLabel(prevKey) + ' 대비' : '');
-    $('funnel').innerHTML =
-      '<li class="f-step s1" style="--w:100%"><span>조회수</span><b>' + fmt(t.views) + '</b></li>' +
-      '<li class="f-gap"><span class="f-rate' + (weak === 1 ? ' weak' : '') + '">' + fmt1(r1) + '% ' + dTxt(d1) + '</span><span class="f-side">' + per(r1) + '</span></li>' +
-      '<li class="f-step s2" style="--w:82%"><span>프로필 방문</span><b>' + fmt(t.profile) + '</b></li>' +
-      '<li class="f-gap"><span class="f-rate' + (weak === 2 ? ' weak' : '') + '">' + fmt1(r2) + '% ' + dTxt(d2) + '</span><span class="f-side">' + per(r2) + '</span></li>' +
-      '<li class="f-step s3" style="--w:64%"><span>링크 클릭</span><b>' + fmt(t.link) + '</b></li>' +
-      '<li class="f-branch" title="프로필 방문자 중 팔로우한 비율"><span>+ 팔로우</span><b>' + fmt(t.follows) + '</b><small>프로필 방문의 ' + pct(t.follows, t.profile) + '</small></li>';
-
-    var overall = t.views ? t.link / t.views * 1000 : 0;
-    var lines = ['<span>조회 <strong>1,000회</strong>당 링크 클릭 <strong>' + fmt1(overall) + '회</strong></span>'];
-    if (weak) {
-      lines.push('<span class="warn-line">' + (weak === 1 ? '조회 → 프로필' : '프로필 → 링크') + ' 단계가 ' + monthLabel(prevKey) + '보다 가장 많이 떨어졌어요</span>');
-    } else if (p) {
-      var po = p.views ? p.link / p.views * 1000 : 0;
-      lines.push('<span class="muted">' + monthLabel(prevKey) + '은 1,000회당 ' + fmt1(po) + '회</span>');
-    }
-    $('funnel-summary').innerHTML = lines.join('');
-  }
-
-  /* ---------- 차트 ---------- */
-  function baseOptions(extra) {
-    var muted = cssVar('--muted'), line = cssVar('--line');
-    var o = {
-      responsive: true, maintainAspectRatio: false, animation: { duration: 350 },
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: cssVar('--text'), titleColor: cssVar('--card'), bodyColor: cssVar('--card'),
-          padding: 10, cornerRadius: 8, boxPadding: 4,
-          callbacks: { label: function (c) { return ' ' + (c.dataset.label ? c.dataset.label + ': ' : '') + fmt1(c.parsed[c.chart.options.indexAxis === 'y' ? 'x' : 'y']); } }
-        }
-      },
-      scales: {
-        x: { grid: { display: false }, border: { color: line }, ticks: { color: muted, font: { size: 12 } } },
-        y: { beginAtZero: true, grid: { color: line }, border: { display: false }, ticks: { color: muted, font: { size: 12 }, maxTicksLimit: 5, callback: function (v) { return fmt(v); } } }
-      }
-    };
-    return deepMerge(o, extra || {});
-  }
-  function deepMerge(a, b) {
-    Object.keys(b).forEach(function (k) {
-      if (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k]) && typeof b[k] !== 'function' && a[k] && typeof a[k] === 'object') deepMerge(a[k], b[k]);
-      else a[k] = b[k];
-    });
-    return a;
-  }
-  function draw(id, config) {
+  /* ---------- 월별 전환율 ---------- */
+  function renderRates() {
     if (typeof Chart === 'undefined') return;
-    if (state.charts[id]) state.charts[id].destroy();
-    state.charts[id] = new Chart($(id), config);
-  }
-  function legendHtml(items) {
-    return items.map(function (it) {
-      return '<span><i style="background:' + it.color + '"></i><em>' + esc(it.label) + '</em>' + (it.value != null ? '<b>' + it.value + '</b>' : '') + '</span>';
-    }).join('');
-  }
-
-  function renderCharts() {
-    if (typeof Chart === 'undefined') {
-      showStatus('warn', '차트 도구를 불러오지 못했습니다', '새로고침해 주세요. 숫자 카드와 표는 정상입니다.');
-      return;
+    var ax = monthAxis(), C = { pri: cssVar('--pri'), link: cssVar('--link'), follow: cssVar('--follow'), card: cssVar('--card') };
+    var rows = ax.months.map(function (m) { return stats(postsIn(m)); });
+    var activeIdx = state.month === 'all' ? -1 : ax.months.indexOf(state.month);
+    function set(label, key, color) {
+      return { label: label, data: rows.map(function (r) { return r[key] == null ? null : Math.round(r[key] * 10) / 10; }),
+        borderColor: color, backgroundColor: color, borderWidth: 2, tension: 0.3, spanGaps: true,
+        pointRadius: ax.months.map(function (_, i) { return i === activeIdx ? 5 : 3; }), pointBorderColor: C.card, pointBorderWidth: 2 };
     }
-    Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
-    var valid = validPosts();
-    var months = monthsOf(valid);
-    var now = nowMonthKey();
-    var labels = months.map(function (m) { return monthLabel(m) + (m === now ? ' (진행 중)' : ''); });
-    var isSel = function (m) { return state.month === 'all' || state.month === m; };
-    var C = { pri: cssVar('--pri'), reach: cssVar('--reach'), link: cssVar('--link'), follow: cssVar('--follow'), other: cssVar('--other'), card: cssVar('--card') };
-    var reachOk = hasReach();
-    var sums = months.map(function (m) { return D.sumPosts(postsIn(m, valid)); });
-
-    // 선택한 달은 x축 글자를 진하게
-    var selTicks = {
-      color: function (c) { return state.month !== 'all' && months[c.index] === state.month ? cssVar('--text') : cssVar('--muted'); },
-      font: function (c) { return { size: 12, weight: state.month !== 'all' && months[c.index] === state.month ? '700' : '400' }; }
-    };
-
-    // (1) 월별 조회수 · 도달
-    var ds = [{
-      label: '조회수', data: sums.map(function (s) { return s.views; }),
-      backgroundColor: C.pri, borderRadius: 4, borderSkipped: 'bottom', maxBarThickness: 34
-    }];
-    if (reachOk) ds.push({
-      label: '도달', data: sums.map(function (s) { return s.reach; }),
-      backgroundColor: C.reach, borderRadius: 4, borderSkipped: 'bottom', maxBarThickness: 34
-    });
-    $('legend-monthly').innerHTML = legendHtml([{ label: '조회수', color: C.pri }].concat(reachOk ? [{ label: '도달', color: C.reach }] : []));
-    draw('chart-monthly', {
-      type: 'bar', data: { labels: labels, datasets: ds },
-      options: baseOptions({
-        datasets: { bar: { categoryPercentage: 0.62, barPercentage: 0.92 } },
-        scales: { x: { ticks: selTicks } }
-      })
-    });
-
-    // (2) 월별 전환율 (모두 % 단위, 축 하나)
-    var rateRows = months.map(function (m) { return stats(postsIn(m, valid)); });
-    var activeIdx = state.month === 'all' ? -1 : months.indexOf(state.month);
-    function rateSet(label, key, color) {
-      return {
-        label: label, data: rateRows.map(function (r) { return r[key] == null ? null : Math.round(r[key] * 10) / 10; }),
-        borderColor: color, backgroundColor: color, borderWidth: 2, tension: 0.3,
-        pointRadius: months.map(function (_, i) { return i === activeIdx ? 5 : 3; }),
-        pointBorderColor: C.card, pointBorderWidth: 2, spanGaps: true
-      };
-    }
-    var rateSets = [
-      rateSet('조회 → 프로필', 'profileRate', C.pri),
-      rateSet('프로필 → 링크', 'linkRate', C.link),
-      rateSet('팔로우 전환', 'followRate', C.follow)
-    ];
-    $('legend-rates').innerHTML = legendHtml(rateSets.map(function (s) { return { label: s.label, color: s.borderColor }; }));
-    draw('chart-rates', {
-      type: 'line', data: { labels: labels, datasets: rateSets },
+    var sets = [set('조회 → 프로필', 'profileRate', C.pri), set('프로필 → 링크', 'linkRate', C.link), set('팔로우 전환', 'followRate', C.follow)];
+    $('legend-rates').innerHTML = legendHtml(sets.map(function (s) { return { label: s.label, color: s.borderColor }; }));
+    draw('chart-rates', { type: 'line', data: { labels: ax.labels, datasets: sets },
       options: baseOptions({
         plugins: { tooltip: { callbacks: { label: function (c) { return ' ' + c.dataset.label + ': ' + fmt1(c.parsed.y) + '%'; } } } },
-        scales: { x: { ticks: selTicks }, y: { ticks: { callback: function (v) { return v + '%'; } } } }
-      })
-    });
+        scales: { x: { ticks: ax.ticks }, y: { ticks: { callback: function (v) { return v + '%'; } } } }
+      }) });
+  }
 
-    // (3) 링크 클릭 비중 (도넛)
-    var cur = postsIn(state.month, valid);
-    var groups = [
-      { key: '주간 공구 라인업', label: '공구 라인업', color: C.pri },
-      { key: '인플루언서 마켓', label: '인플루언서 마켓', color: C.link },
-      { key: '기타', label: '기타', color: C.other }
-    ].map(function (g) {
-      var list = cur.filter(function (p) { return p.group === g.key; });
-      g.n = list.length; g.v = list.reduce(function (a, p) { return a + p.values.link; }, 0); return g;
-    }).filter(function (g) { return g.n > 0; });
-    var totalLink = groups.reduce(function (a, g) { return a + g.v; }, 0);
-    $('donut-total').textContent = fmt(totalLink);
-    $('legend-donut').innerHTML = legendHtml(groups.map(function (g) {
-      return { label: g.label + ' (' + g.n + '건)', color: g.color, value: fmt(g.v) + ' · ' + pct(g.v, totalLink) };
-    }));
-    draw('chart-donut', {
-      type: 'doughnut',
-      data: { labels: groups.map(function (g) { return g.label; }), datasets: [{ data: groups.map(function (g) { return g.v; }), backgroundColor: groups.map(function (g) { return g.color; }), borderColor: C.card, borderWidth: 2, hoverOffset: 4 }] },
-      options: {
-        responsive: true, maintainAspectRatio: false, cutout: '68%', animation: { duration: 350 },
-        plugins: { legend: { display: false }, tooltip: { backgroundColor: cssVar('--text'), titleColor: C.card, bodyColor: C.card, padding: 10, cornerRadius: 8,
-          callbacks: { label: function (c) { return ' ' + fmt(c.parsed) + ' (' + pct(c.parsed, totalLink) + ')'; } } } }
-      }
+  /* ---------- 브랜드별 링크 전환 (전체 기간) ---------- */
+  function renderBrands() {
+    if (typeof Chart === 'undefined') return;
+    var br = {};
+    validPosts().filter(function (p) { return p.brand && base(p.values) > 0; }).forEach(function (p) {
+      var b = br[p.brand] || (br[p.brand] = { n: 0, link: 0, den: 0 });
+      b.n++; b.link += p.values.link; b.den += base(p.values);
     });
-
-    // (4) 브랜드별 평균 링크 클릭
-    var brands = {};
-    cur.filter(function (p) { return p.brand; }).forEach(function (p) {
-      var b = brands[p.brand] || (brands[p.brand] = { n: 0, link: 0 });
-      b.n++; b.link += p.values.link;
-    });
-    var bList = Object.keys(brands).map(function (k) { return { k: k, n: brands[k].n, avg: brands[k].link / brands[k].n }; })
-      .sort(function (a, b) { return b.avg - a.avg; });
+    var bl = Object.keys(br).map(function (k) { return { k: k, n: br[k].n, r: br[k].link / br[k].den * 100 }; })
+      .sort(function (a, b) { return b.r - a.r; });
     draw('chart-brands', {
       type: 'bar',
-      data: { labels: bList.map(function (b) { return b.k + ' (' + b.n + '건)'; }),
-        datasets: [{ label: '평균 링크 클릭', data: bList.map(function (b) { return b.avg; }), backgroundColor: C.link, borderRadius: 4, borderSkipped: 'start', maxBarThickness: 22 }] },
+      data: { labels: bl.map(function (b) { return b.k + ' (' + b.n + '건)'; }),
+        datasets: [{ label: '링크 전환', data: bl.map(function (b) { return Math.round(b.r * 10) / 10; }), backgroundColor: cssVar('--link'), borderRadius: 4, borderSkipped: 'start', maxBarThickness: 20 }] },
       options: baseOptions({
         indexAxis: 'y', interaction: { mode: 'nearest', intersect: true, axis: 'y' },
+        plugins: { tooltip: { callbacks: { label: function (c) { return ' 링크 전환 ' + fmt1(c.parsed.x) + '%'; } } } },
         scales: {
-          x: { grid: { display: true, color: cssVar('--line') }, border: { display: false }, ticks: { maxTicksLimit: 5, callback: function (v) { return fmt(v); } } },
-          y: { grid: { display: false }, border: { color: cssVar('--line') }, ticks: { callback: function (v, i) { return bList[i] ? bList[i].k + ' (' + bList[i].n + '건)' : v; } } }
-        }
-      })
-    });
-
-    // (5) 반응 구성
-    var t = D.sumPosts(cur);
-    var eng = [['좋아요', t.likes], ['저장', t.saves], ['공유', t.shares], ['댓글', t.comments]];
-    draw('chart-engage', {
-      type: 'bar',
-      data: { labels: eng.map(function (e) { return e[0]; }),
-        datasets: [{ label: periodLabel(), data: eng.map(function (e) { return e[1]; }), backgroundColor: C.pri, borderRadius: 4, borderSkipped: 'start', maxBarThickness: 22 }] },
-      options: baseOptions({
-        indexAxis: 'y', interaction: { mode: 'nearest', intersect: true, axis: 'y' },
-        scales: {
-          x: { grid: { display: true, color: cssVar('--line') }, border: { display: false }, ticks: { maxTicksLimit: 5, callback: function (v) { return fmt(v); } } },
-          y: { grid: { display: false }, border: { color: cssVar('--line') }, ticks: { callback: function (v, i) { return eng[i] ? eng[i][0] : v; } } }
+          x: { grid: { display: true, color: cssVar('--line') }, border: { display: false }, ticks: { maxTicksLimit: 4, callback: function (v) { return v + '%'; } } },
+          y: { grid: { display: false }, border: { color: cssVar('--line') }, ticks: { callback: function (v, i) { return bl[i] ? bl[i].k + ' (' + bl[i].n + '건)' : v; } } }
         }
       })
     });
