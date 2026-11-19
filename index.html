@@ -157,7 +157,6 @@ button, input, select { font: inherit; color: inherit; }
 .kpi-value { font-size: 26px; font-weight: 800; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; line-height: 1.15; }
 .kpi-value small { font-size: 15px; font-weight: 700; margin-left: 1px; }
 .kpi-foot { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; min-height: 18px; }
-.spark { display: block; width: 100%; height: 34px; margin-top: auto; padding-top: 6px; }
 .kpi.hero { background: linear-gradient(135deg, var(--pri) 0%, var(--pri-2) 100%); border-color: transparent; color: #fff; }
 .kpi.hero .kpi-label, .kpi.hero .kpi-foot { color: rgba(255, 255, 255, .85); }
 .delta { font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -175,6 +174,7 @@ button, input, select { font: inherit; color: inherit; }
 .eff.bad .eff-icon { background: var(--bad-soft); color: var(--bad); }
 .eff-list { list-style: none; margin: 0; padding: 0; }
 .eff-list li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 4px 10px; padding: 12px 0; border-top: 1px solid var(--line); }
+.eff-list li.eff-empty { display: block; }
 .eff-list li:first-child { border-top: 0; }
 .eff-rank { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--soft); color: var(--muted); }
 .eff.good li:first-child .eff-rank { background: var(--good); color: #fff; }
@@ -182,16 +182,57 @@ button, input, select { font: inherit; color: inherit; }
 .eff-main { min-width: 0; display: grid; gap: 6px; }
 .eff-title-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .eff-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
-.eff-meter { position: relative; height: 8px; border-radius: 4px; background: var(--soft); }
-.eff-meter i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
-.eff.good .eff-meter i { background: var(--good); }
-.eff.bad .eff-meter i { background: var(--bad); }
-.eff-meter b { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--text); border-radius: 1px; }
-.eff-sub { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); }
-.eff-sub strong { color: var(--text); font-variant-numeric: tabular-nums; }
+.eff-headline { font-size: 14px; color: var(--text); }
+.eff-headline strong { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.eff.good .eff-headline strong { color: var(--good); }
+.eff.bad .eff-headline strong { color: var(--bad); }
+.eff-badge { display: inline-block; margin-left: 4px; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; vertical-align: 2px; }
+.eff.good .eff-badge { background: var(--good-soft); color: var(--good); }
+.eff.bad .eff-badge { background: var(--bad-soft); color: var(--bad); }
+/* 이 게시물 vs 평균: 같은 눈금의 두 막대 */
+.eff-compare { display: grid; grid-template-columns: 52px minmax(0, 1fr) 48px; gap: 4px 8px; align-items: center; font-size: 12px; color: var(--muted); }
+.eff-compare b { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); }
+.cbar { height: 10px; border-radius: 5px; background: var(--soft); overflow: hidden; }
+.cbar i { display: block; height: 100%; border-radius: 5px; }
+.eff.good .cbar i.me { background: var(--good); }
+.eff.bad .cbar i.me { background: var(--bad); }
+.cbar i.avg { background: var(--faint); }
+.eff-reason { font-size: 12.5px; color: var(--muted); }
+.eff-reason b { color: var(--text); font-weight: 700; }
+.eff.good .eff-reason { color: var(--good); }
+.eff.bad .eff-reason { color: var(--bad); }
+.eff-reason b { color: inherit; }
+.eff-date { font-size: 11.5px; color: var(--faint); white-space: nowrap; margin-left: auto; }
+.eff-list li:first-child { border-top: 0; }
+.eff-rank { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--soft); color: var(--muted); }
+.eff.good li:first-child .eff-rank { background: var(--good); color: #fff; }
+.eff.bad li:first-child .eff-rank { background: var(--bad); color: #fff; }
+.eff-main { min-width: 0; display: grid; gap: 6px; }
+.eff-title-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.eff-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 .eff-empty { padding: 18px 0; color: var(--muted); font-size: 13px; }
-.eff-legend { display: flex; align-items: center; gap: 6px; }
-.eff-legend b { display: inline-block; width: 2px; height: 12px; background: var(--text); border-radius: 1px; }
+.eff-legend { display: inline-flex; align-items: center; gap: 4px; }
+.eff-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
+
+/* ---------- 기획 참고 카드 ---------- */
+.plan { display: grid; gap: 14px; align-content: start; }
+.plan-block { display: grid; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
+.plan-block:first-of-type { border-top: 0; padding-top: 0; }
+.plan-label { font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.plan-insight { font-size: 13px; font-weight: 600; }
+.plan-insight em { font-style: normal; color: var(--pri); }
+.plan-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.plan-table th { text-align: right; font-weight: 600; color: var(--faint); padding: 2px 0 4px 6px; white-space: nowrap; }
+.plan-table th:first-child, .plan-table td:first-child { text-align: left; padding-left: 0; }
+.plan-table td { text-align: right; padding: 5px 0 5px 6px; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.plan-table td.win { font-weight: 800; color: var(--pri); }
+.chart-box.mini { height: 104px; margin-top: 0; flex: none !important; min-height: 0 !important; }
+.plan-brands { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.plan-brands li { display: grid; grid-template-columns: 72px minmax(0, 1fr) 52px; gap: 8px; align-items: center; font-size: 12.5px; }
+.plan-brands .bar { height: 8px; border-radius: 4px; background: var(--soft); overflow: hidden; }
+.plan-brands .bar i { display: block; height: 100%; border-radius: 4px; background: var(--link); }
+.plan-brands b { text-align: right; font-variant-numeric: tabular-nums; }
+.plan-brands small { color: var(--faint); }
 
 /* ---------- 레이아웃 그리드 ---------- */
 .grid-2-1 { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 12px; }
@@ -212,15 +253,37 @@ button, input, select { font: inherit; color: inherit; }
 .donut-center span { font-size: 12px; color: var(--muted); }
 .donut-center b { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
 
-/* ---------- 퍼널 ---------- */
-.funnel { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 12px; }
-.funnel li { display: grid; gap: 5px; }
-.funnel-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 13px; }
-.funnel-top b { font-size: 17px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-.funnel-top span { color: var(--muted); }
-.funnel-track { height: 12px; border-radius: 6px; background: var(--soft); overflow: hidden; }
-.funnel-bar { height: 100%; border-radius: 6px; min-width: 4px; transition: width .5s cubic-bezier(.2, .7, .2, 1); }
-.funnel-rate { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+/* ---------- 퍼널: 단계 블록 + 단계 사이 전환율 ---------- */
+.funnel { list-style: none; margin: 14px 0 0; padding: 0; display: grid; justify-items: center; }
+.f-step {
+  width: var(--w); border-radius: 12px; padding: 12px 14px; color: #fff;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+}
+.f-step span { font-size: 13px; font-weight: 600; opacity: .92; }
+.f-step b { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.f-step.s1 { background: var(--pri); }
+.f-step.s2 { background: color-mix(in srgb, var(--pri) 70%, var(--link)); }
+.f-step.s3 { background: var(--link); }
+.f-gap { width: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 6px 0; }
+.f-gap::before { content: ""; grid-column: 2; grid-row: 1; justify-self: center; width: 2px; height: 100%; min-height: 34px; background: var(--line); }
+.f-rate {
+  grid-column: 2; grid-row: 1; justify-self: center; display: inline-flex; align-items: center; gap: 6px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px;
+  font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; z-index: 1;
+}
+.f-rate.weak { border-color: var(--bad); color: var(--bad); background: var(--bad-soft); }
+.f-rate small { font-weight: 600; color: var(--muted); }
+.f-rate.weak small { color: inherit; opacity: .8; }
+.f-side { grid-column: 3; grid-row: 1; justify-self: start; padding-left: 10px; font-size: 11.5px; color: var(--muted); line-height: 1.3; }
+.f-branch {
+  margin-top: 8px; width: 64%; display: flex; align-items: baseline; gap: 6px; white-space: nowrap; flex-wrap: wrap;
+  border: 1px dashed var(--follow); color: var(--follow); border-radius: 10px; padding: 6px 12px; font-size: 12.5px; font-weight: 600;
+}
+.f-branch b { font-variant-numeric: tabular-nums; font-size: 14px; }
+.f-branch small { margin-left: auto; font-weight: 500; opacity: .85; }
+.funnel-summary { margin-top: 14px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--soft); font-size: 13px; display: grid; gap: 4px; }
+.funnel-summary strong { font-size: 15px; }
+.funnel-summary .warn-line { color: var(--bad); font-weight: 600; }
 
 /* ---------- 접는 영역 (표 · 검증) ---------- */
 .fold { padding: 0; }
@@ -326,6 +389,7 @@ body.modal-open { overflow: hidden; }
   .card { padding: 16px; }
   .section-head .segmented { margin-left: 0; width: 100%; }
   .chart-box { height: 230px; }
+
   .donut-wrap { grid-template-columns: 1fr; }
   .search input { width: 100%; }
 
@@ -426,17 +490,30 @@ body.modal-open { overflow: hidden; }
         <section aria-labelledby="trend-title">
           <div class="section-head">
             <h2 id="trend-title">월별 추이</h2>
-            <p class="muted small">선택한 달은 아래 글자가 굵게 표시돼요</p>
+            <p class="muted small">선택한 달은 아래 글자가 굵게 · 오른쪽은 전체 기간 기준</p>
           </div>
           <div class="grid-2-1">
             <article class="card chart-card">
               <div class="legend" id="legend-monthly"></div>
               <div class="chart-box"><canvas id="chart-monthly" role="img" aria-label="월별 조회수와 도달 막대 차트"></canvas></div>
             </article>
-            <article class="card">
-              <h3 class="card-title">조회에서 링크 클릭까지</h3>
-              <p id="funnel-note" class="muted small"></p>
-              <ol id="funnel" class="funnel"></ol>
+            <article class="card plan" aria-labelledby="plan-title">
+              <h3 id="plan-title" class="card-title">다음 콘텐츠 기획 참고</h3>
+              <p id="plan-note" class="muted small"></p>
+              <div class="plan-block">
+                <p class="plan-label">게시물 종류별 강점</p>
+                <table id="plan-types" class="plan-table"></table>
+                <p id="plan-types-insight" class="plan-insight"></p>
+              </div>
+              <div class="plan-block">
+                <p class="plan-label">올린 요일별 링크 전환</p>
+                <div class="chart-box mini"><canvas id="chart-weekday" role="img" aria-label="요일별 링크 전환 막대 차트"></canvas></div>
+                <p id="plan-weekday" class="plan-insight"></p>
+              </div>
+              <div class="plan-block">
+                <p class="plan-label">브랜드별 링크 전환</p>
+                <ul id="plan-brands" class="plan-brands"></ul>
+              </div>
             </article>
           </div>
         </section>
@@ -1211,6 +1288,7 @@ window.DASHBOARD_CONFIG = {
     renderKpis();
     renderEfficiency();
     renderCharts();
+    renderPlan();
     renderFunnel();
     renderTable();
     renderVerify();
@@ -1250,33 +1328,12 @@ window.DASHBOARD_CONFIG = {
     return '<span class="delta ' + (d > 0 ? 'up' : 'down') + '">' + (d > 0 ? '▲ ' : '▼ ') + fmt1(Math.abs(d)) + '%</span>';
   }
 
-  function sparkSvg(values, activeIdx, color, onHero) {
-    var w = 120, h = 30, pad = 3;
-    var vals = values.map(function (v) { return v == null ? 0 : v; });
-    var max = Math.max.apply(null, vals.concat([0])), min = Math.min.apply(null, vals.concat([max]));
-    if (max === min) { max = max + 1; }
-    var step = vals.length > 1 ? (w - pad * 2) / (vals.length - 1) : 0;
-    var pts = vals.map(function (v, i) {
-      return [pad + step * i, h - pad - (v - min) / (max - min) * (h - pad * 2)];
-    });
-    var line = pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
-    var area = 'M' + pts[0][0] + ',' + h + ' L' + line.replace(/ /g, ' L') + ' L' + pts[pts.length - 1][0] + ',' + h + ' Z';
-    var a = pts[activeIdx] || pts[pts.length - 1];
-    var dotFill = onHero ? '#fff' : color;
-    return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true">' +
-      '<path d="' + area + '" fill="' + (onHero ? 'rgba(255,255,255,.16)' : withAlpha(color, 0.12)) + '"/>' +
-      '<polyline points="' + line + '" fill="none" stroke="' + (onHero ? 'rgba(255,255,255,.9)' : color) + '" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/>' +
-      '<circle cx="' + a[0] + '" cy="' + a[1] + '" r="3.2" fill="' + dotFill + '" stroke="' + (onHero ? 'rgba(0,0,0,.15)' : cssVar('--card')) + '" stroke-width="1.5" vector-effect="non-scaling-stroke"/>' +
-      '</svg>';
-  }
-
   function renderKpis() {
     var months = monthsOf(validPosts());
     var cur = stats(postsIn(state.month));
     var prevKey = prevMonthKey();
     var prev = prevKey ? stats(postsIn(prevKey)) : null;
     var monthly = months.map(function (m) { return stats(postsIn(m)); });
-    var activeIdx = state.month === 'all' ? months.length - 1 : months.indexOf(state.month);
     var reachOk = hasReach();
     var C = { pri: cssVar('--pri'), link: cssVar('--link'), follow: cssVar('--follow') };
     var cmp = prevKey ? '<span>' + monthLabel(prevKey) + ' 대비</span>' : '';
@@ -1312,17 +1369,24 @@ window.DASHBOARD_CONFIG = {
         '<div class="kpi-label">' + esc(c.label) + '</div>' +
         '<div class="kpi-value">' + c.value + '</div>' +
         '<div class="kpi-foot">' + c.foot + '</div>' +
-        (months.length > 1 ? sparkSvg(c.series, activeIdx, c.color || '#fff', !!c.hero) : '') +
         '</div>';
     }).join('');
   }
 
   /* ---------- 고효율 · 저효율 콘텐츠 ---------- */
+  // 효율 기준마다 '도달 → … → 결과' 단계를 정의
   var BASIS = {
-    link:   { tab: '링크 전환', num: function (v) { return v.link; }, numLabel: '링크', desc: '대비 링크 클릭' },
-    follow: { tab: '팔로우 전환', num: function (v) { return v.follows; }, numLabel: '팔로우', desc: '대비 신규 팔로우' },
-    engage: { tab: '반응률', num: function (v) { return v.likes + v.saves + v.shares + v.comments; }, numLabel: '반응', desc: '대비 좋아요·저장·공유·댓글' }
+    link:   { tab: '링크 전환', act: '링크를 눌렀어요', what: '링크 클릭', desc: '대비 링크 클릭',
+              steps: [{ k: 'profile', label: '프로필' }, { k: 'link', label: '링크' }],
+              num: function (v) { return v.link; } },
+    follow: { tab: '팔로우 전환', act: '팔로우했어요', what: '팔로우', desc: '대비 신규 팔로우',
+              steps: [{ k: 'profile', label: '프로필' }, { k: 'follows', label: '팔로우' }],
+              num: function (v) { return v.follows; } },
+    engage: { tab: '반응률', act: '반응했어요', what: '반응', desc: '대비 좋아요·저장·공유·댓글',
+              steps: [{ k: 'engage', label: '반응' }],
+              num: function (v) { return v.likes + v.saves + v.shares + v.comments; } }
   };
+  function stepVal(v, k) { return k === 'engage' ? v.likes + v.saves + v.shares + v.comments : v[k]; }
 
   function renderEfficiency() {
     $('eff-basis').innerHTML = Object.keys(BASIS).map(function (k) {
@@ -1337,34 +1401,154 @@ window.DASHBOARD_CONFIG = {
       .sort(function (a, b) { return b.rate - a.rate || b.num - a.num; });
     var sumN = list.reduce(function (a, x) { return a + x.num; }, 0), sumD = list.reduce(function (a, x) { return a + x.den; }, 0);
     var avg = sumD ? sumN / sumD * 100 : 0;
-    var max = list.length ? Math.max(list[0].rate, avg) : 1;
 
-    var note = periodLabel() + ' · ' + denLabel + ' ' + B.desc + ' · 평균 ' + fmt1(avg) + '%';
-    if (fresh.length) note += ' · 올린 지 ' + FRESH_DAYS + '일 안 된 ' + fresh.length + '건은 집계 중이라 제외';
-    $('eff-note').innerHTML = '<span>' + esc(note) + '</span><span class="eff-legend"><b></b>평균선</span>';
+    // 단계별 평균 비율 (이 기간 전체 합 기준): 각 칸 색을 정할 때 비교 대상
+    var tot = { den: sumD };
+    B.steps.forEach(function (st) { tot[st.k] = list.reduce(function (a, x) { return a + stepVal(x.p.values, st.k); }, 0); });
+    var avgStep = [];
+    B.steps.forEach(function (st, i) {
+      var prevTot = i === 0 ? tot.den : tot[B.steps[i - 1].k];
+      avgStep.push(prevTot ? tot[st.k] / prevTot * 100 : 0);
+    });
 
-    // 고효율 = 평균 이상 중 상위 3건, 저효율 = 평균 미만 중 하위 3건
+    // 평균이 10명 이상 되는 가장 작은 기준(100 / 1,000 / 1만 명)을 골라 정수로 말하기
+    var unit = [100, 1000, 10000].filter(function (u) { return avg / 100 * u >= 10; })[0] || 10000;
+    var unitTxt = unit === 100 ? '100명' : unit === 1000 ? '1,000명' : '1만 명';
+    function people(rate) { return fmt(rate / 100 * unit); }
+
+    var note = periodLabel() + ' · ' + denLabel + ' ' + unitTxt + '에게 보여줬을 때 몇 명이 ' + B.act.replace('어요', '는지') + ' 비교';
+    if (fresh.length) note += ' · 올린 지 ' + FRESH_DAYS + '일 안 된 ' + fresh.length + '건 제외';
+    $('eff-note').textContent = note;
+
     var above = list.filter(function (x) { return x.rate >= avg; });
     var below = list.filter(function (x) { return x.rate < avg; });
     var top = list.length >= 2 ? above.slice(0, 3) : [];
     var low = list.length >= 2 ? below.slice(-3).reverse() : [];
-    function item(x, i) {
-      var p = x.p, ratio = avg ? x.rate / avg : 0;
+    var barMax = Math.max(avg, list.length ? list[0].rate : 0) || 1;
+
+    // 왜 높/낮은지 한 줄 이유: 단계별 비율을 평균과 비교해 가장 두드러진 단계를 말로 풀기
+    function reason(x, good) {
+      var v = x.p.values;
+      if (B.steps.length < 2) {
+        var parts = [['좋아요', v.likes], ['저장', v.saves], ['공유', v.shares], ['댓글', v.comments]].filter(function (q) { return q[1] > 0; })
+          .map(function (q) { return q[0] + ' ' + fmt(q[1]); });
+        return parts.length ? parts.join(' · ') : '반응이 거의 없었어요';
+      }
+      var s1 = x.den ? v.profile / x.den * 100 : 0;                       // 도달 → 프로필
+      var s2 = v.profile ? stepVal(v, B.steps[1].k) / v.profile * 100 : 0; // 프로필 → 결과
+      var r1 = avgStep[0] ? s1 / avgStep[0] : 1, r2 = avgStep[1] ? s2 / avgStep[1] : 1;
+      function times(r) { return r >= 1 ? fmt1(r) + '배' : (r > 0 ? '1/' + fmt(1 / r) : '0'); }
+      if (good) {
+        return r1 >= r2
+          ? '게시물을 본 사람이 <b>프로필로 많이 넘어왔어요</b> (평균의 ' + times(r1) + ')'
+          : '프로필에 온 사람이 <b>' + B.what + '까지 잘 이어졌어요</b> (평균의 ' + times(r2) + ')';
+      }
+      if (!v.profile) return '게시물을 본 사람이 <b>프로필로 넘어오지 않았어요</b>';
+      return r1 <= r2
+        ? '게시물을 본 사람이 <b>프로필로 거의 안 넘어왔어요</b> (평균의 ' + times(r1) + ')'
+        : '프로필엔 왔지만 <b>' + B.what + '로 이어지지 않았어요</b> (평균의 ' + times(r2) + ')';
+    }
+
+    function item(x, i, good) {
+      var p = x.p;
       var tag = p.brand ? '<span class="tag market">' + esc(p.brand) + '</span>'
         : p.group === '주간 공구 라인업' ? '<span class="tag lineup">라인업</span>' : '<span class="tag">' + esc(p.group) + '</span>';
       var title = p.url
         ? '<button type="button" class="title-btn eff-title" data-row="' + p.row + '" title="' + esc(p.title) + '">' + esc(p.title) + '</button>'
         : '<span class="eff-title" title="' + esc(p.title) + '">' + esc(p.title) + '</span>';
+      var ratio = avg ? x.rate / avg : 0;
+      var badge = !avg ? '' : ratio >= 1 ? '평균의 ' + fmt1(ratio) + '배' : '평균의 ' + Math.round(ratio * 100) + '%';
       return '<li><span class="eff-rank">' + (i + 1) + '</span><div class="eff-main">' +
-        '<div class="eff-title-row">' + title + tag + '</div>' +
-        '<div class="eff-meter" role="img" aria-label="' + fmt1(x.rate) + '%, 평균 ' + fmt1(avg) + '%"><i style="width:' + Math.max(x.rate / max * 100, 1.5) + '%"></i><b style="left:' + (avg / max * 100) + '%"></b></div>' +
-        '<div class="eff-sub"><span><strong>' + fmt1(x.rate) + '%</strong>' + (avg ? ' · ' + (ratio >= 1 ? '평균의 ' + fmt1(ratio) + '배' : '평균보다 ' + Math.round((1 - ratio) * 100) + '% 낮음') : '') + '</span>' +
-        '<span>' + D.fmtDate(p.date) + ' · ' + B.numLabel + ' ' + fmt(x.num) + ' / ' + denLabel + ' ' + fmt(x.den) + '</span></div>' +
+        '<div class="eff-title-row">' + title + tag + '<span class="eff-date">' + D.fmtDate(p.date) + '</span></div>' +
+        '<p class="eff-headline">' + unitTxt + ' 중 <strong>' + people(x.rate) + '명</strong>이 ' + B.act + ' <span class="eff-badge">' + badge + '</span></p>' +
+        '<div class="eff-compare" role="img" aria-label="이 게시물 ' + people(x.rate) + '명, 평균 ' + people(avg) + '명">' +
+          '<span>이 게시물</span><span class="cbar"><i class="me" style="width:' + Math.max(x.rate / barMax * 100, 1.5) + '%"></i></span><b>' + people(x.rate) + '명</b>' +
+          '<span>평균</span><span class="cbar"><i class="avg" style="width:' + (avg / barMax * 100) + '%"></i></span><b class="muted">' + people(avg) + '명</b>' +
+        '</div>' +
+        '<p class="eff-reason">' + (good ? '✓ ' : '✕ ') + reason(x, good) + '</p>' +
         '</div></li>';
     }
     var empty = '<li class="eff-empty">비교할 게시물이 2건 이상 있어야 보여 드려요.</li>';
-    $('eff-top').innerHTML = top.length ? top.map(item).join('') : empty;
-    $('eff-low').innerHTML = low.length ? low.map(item).join('') : empty;
+    $('eff-top').innerHTML = top.length ? top.map(function (x, i) { return item(x, i, true); }).join('') : empty;
+    $('eff-low').innerHTML = low.length ? low.map(function (x, i) { return item(x, i, false); }).join('') : empty;
+  }
+
+  /* ---------- 다음 콘텐츠 기획 참고 (전체 기간) ---------- */
+  var WEEK = ['일', '월', '화', '수', '목', '금', '토'];
+  function rateOf(list, key) {
+    var den = list.reduce(function (a, p) { return a + base(p.values); }, 0);
+    var num = list.reduce(function (a, p) { return a + stepVal(p.values, key); }, 0);
+    return den ? num / den * 100 : null;
+  }
+  function renderPlan() {
+    var pool = validPosts().filter(function (p) { return daysSince(p.date) >= FRESH_DAYS && base(p.values) > 0; });
+    var denLabel = hasReach() ? '도달' : '조회';
+    $('plan-note').textContent = '전체 기간 게시물 ' + pool.length + '건 기준 · 비율은 ' + denLabel + ' 대비';
+
+    // (1) 게시물 종류별 강점
+    var types = [{ key: '주간 공구 라인업', label: '공구 라인업' }, { key: '인플루언서 마켓', label: '인플루언서 마켓' }, { key: '기타', label: '기타' }]
+      .map(function (t) {
+        var l = pool.filter(function (p) { return p.group === t.key; });
+        return { label: t.label, n: l.length,
+          reach: l.length ? l.reduce(function (a, p) { return a + base(p.values); }, 0) / l.length : 0,
+          link: rateOf(l, 'link'), follow: rateOf(l, 'follows') };
+      }).filter(function (t) { return t.n > 0; });
+    var cols = [{ k: 'reach', h: '평균 ' + denLabel, f: function (v) { return fmt(v); } },
+                { k: 'link', h: '링크 전환', f: function (v) { return v == null ? '–' : fmt1(v) + '%'; } },
+                { k: 'follow', h: '팔로우 전환', f: function (v) { return v == null ? '–' : fmt1(v) + '%'; } }];
+    var best = {};
+    cols.forEach(function (c) { best[c.k] = Math.max.apply(null, types.map(function (t) { return t[c.k] || 0; })); });
+    $('plan-types').innerHTML = '<thead><tr><th></th>' + cols.map(function (c) { return '<th>' + c.h + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      types.map(function (t) {
+        return '<tr><td>' + t.label + ' <span class="muted">' + t.n + '건</span></td>' + cols.map(function (c) {
+          return '<td' + (types.length > 1 && t[c.k] === best[c.k] && best[c.k] > 0 ? ' class="win"' : '') + '>' + c.f(t[c.k]) + '</td>';
+        }).join('') + '</tr>';
+      }).join('') + '</tbody>';
+    var lu = types.filter(function (t) { return t.label === '공구 라인업'; })[0], mk = types.filter(function (t) { return t.label === '인플루언서 마켓'; })[0];
+    var ins = '';
+    if (lu && mk && lu.follow && mk.follow) {
+      var fr = lu.follow / mk.follow, lr = mk.link && lu.link ? mk.link / lu.link : null;
+      if (fr >= 1.3) ins = '팔로워를 늘리려면 <em>공구 라인업</em>이 마켓보다 ' + fmt1(fr) + '배 효과적이에요';
+      else if (fr <= 1 / 1.3) ins = '팔로워를 늘리려면 <em>인플루언서 마켓</em>이 라인업보다 ' + fmt1(1 / fr) + '배 효과적이에요';
+      if (lr != null) ins += (ins ? '. ' : '') + (lr >= 1.3 ? '링크 클릭은 <em>마켓</em> 쪽이 ' + fmt1(lr) + '배' : lr <= 1 / 1.3 ? '링크 클릭은 <em>라인업</em> 쪽이 ' + fmt1(1 / lr) + '배' : '링크 전환은 둘이 비슷해요');
+    }
+    $('plan-types-insight').innerHTML = ins;
+
+    // (2) 요일별 링크 전환
+    var wk = [1, 2, 3, 4, 5, 6, 0].map(function (d) {
+      var l = pool.filter(function (p) { return new Date(p.date + 'T00:00:00').getDay() === d; });
+      return { d: d, n: l.length, rate: rateOf(l, 'link') };
+    });
+    var ok = wk.filter(function (w) { return w.n >= 2 && w.rate != null; }).sort(function (a, b) { return b.rate - a.rate; });
+    var bestDay = ok[0];
+    if (typeof Chart !== 'undefined') {
+      var pri = cssVar('--pri'), soft = cssVar('--reach');
+      draw('chart-weekday', {
+        type: 'bar',
+        data: { labels: wk.map(function (w) { return WEEK[w.d]; }),
+          datasets: [{ label: '링크 전환', data: wk.map(function (w) { return w.rate == null ? 0 : Math.round(w.rate * 10) / 10; }),
+            backgroundColor: wk.map(function (w) { return bestDay && w.d === bestDay.d ? pri : soft; }),
+            borderRadius: 3, borderSkipped: 'bottom', maxBarThickness: 22 }] },
+        options: baseOptions({
+          interaction: { mode: 'nearest', intersect: false, axis: 'x' },
+          plugins: { tooltip: { callbacks: { label: function (c) { var w = wk[c.dataIndex]; return ' ' + (w.n ? fmt1(w.rate) + '% · 게시물 ' + w.n + '건' : '게시물 없음'); } } } },
+          scales: { y: { ticks: { maxTicksLimit: 3, callback: function (v) { return v + '%'; } } }, x: { ticks: { font: { size: 11 } } } }
+        })
+      });
+    }
+    $('plan-weekday').innerHTML = bestDay
+      ? '<em>' + WEEK[bestDay.d] + '요일</em>에 올린 게시물의 링크 전환이 가장 높아요 (' + fmt1(bestDay.rate) + '%, ' + bestDay.n + '건)'
+      : '요일을 비교하려면 같은 요일 게시물이 2건 이상 필요해요';
+
+    // (3) 브랜드별 링크 전환
+    var br = {};
+    pool.filter(function (p) { return p.brand; }).forEach(function (p) { (br[p.brand] = br[p.brand] || []).push(p); });
+    var bl = Object.keys(br).map(function (k) { return { k: k, n: br[k].length, rate: rateOf(br[k], 'link') }; })
+      .sort(function (a, b) { return b.rate - a.rate; });
+    var bmax = bl.length ? bl[0].rate || 1 : 1;
+    $('plan-brands').innerHTML = bl.length ? bl.map(function (b) {
+      return '<li><span>' + esc(b.k) + ' <small>' + b.n + '건</small></span><span class="bar"><i style="width:' + Math.max(b.rate / bmax * 100, 2) + '%"></i></span><b>' + fmt1(b.rate) + '%</b></li>';
+    }).join('') : '<li class="muted">브랜드 마켓 게시물이 없어요</li>';
   }
 
   /* ---------- 퍼널 ---------- */
@@ -1377,25 +1561,46 @@ window.DASHBOARD_CONFIG = {
     return 10 * p;
   }
   function renderFunnel() {
+    if (!$('funnel')) return;   // 퍼널 카드를 화면에서 뺐을 때
     var t = D.sumPosts(postsIn(state.month));
-    var axis;
-    if (state.month === 'all') axis = niceCeil(t.views);
-    else axis = niceCeil(Math.max.apply(null, monthsOf(validPosts()).map(function (m) { return D.sumPosts(postsIn(m)).views; })));
-    $('funnel-note').textContent = state.month === 'all'
-      ? '막대는 0~' + fmt(axis) + ' 눈금'
-      : '달끼리 비교되게 모든 달을 0~' + fmt(axis) + ' 같은 눈금으로';
-    var steps = [
-      { key: 'views', label: '조회수', color: '--pri', rate: '게시물 ' + postsIn(state.month).length + '건' },
-      { key: 'profile', label: '프로필 방문', color: '--reach', rate: '조회 대비 ' + pct(t.profile, t.views) },
-      { key: 'link', label: '링크 클릭', color: '--link', rate: '프로필 방문 대비 ' + pct(t.link, t.profile) },
-      { key: 'follows', label: '신규 팔로우', color: '--follow', rate: '프로필 방문 대비 ' + pct(t.follows, t.profile) }
-    ];
-    $('funnel').innerHTML = steps.map(function (s) {
-      var w = Math.max(t[s.key] / axis * 100, 0.6);
-      return '<li><div class="funnel-top"><span>' + s.label + '</span><b>' + fmt(t[s.key]) + '</b></div>' +
-        '<div class="funnel-track"><div class="funnel-bar" style="width:' + w + '%;background:var(' + s.color + ')"></div></div>' +
-        '<div class="funnel-rate">' + s.rate + '</div></li>';
-    }).join('');
+    var prevKey = prevMonthKey();
+    var p = prevKey ? D.sumPosts(postsIn(prevKey)) : null;
+    var r1 = t.views ? t.profile / t.views * 100 : 0;      // 조회 → 프로필
+    var r2 = t.profile ? t.link / t.profile * 100 : 0;     // 프로필 → 링크
+    var pr1 = p && p.views ? p.profile / p.views * 100 : null;
+    var pr2 = p && p.profile ? p.link / p.profile * 100 : null;
+    var d1 = pr1 == null ? null : r1 - pr1, d2 = pr2 == null ? null : r2 - pr2;
+    // 지난달보다 가장 많이 떨어진 단계를 빨간색으로 표시
+    var weak = 0;
+    if (d1 != null && d2 != null) {
+      var rel1 = pr1 ? d1 / pr1 : 0, rel2 = pr2 ? d2 / pr2 : 0;
+      if (Math.min(rel1, rel2) < -0.1) weak = rel1 <= rel2 ? 1 : 2;
+    }
+    function dTxt(d) {
+      if (d == null) return '';
+      if (Math.abs(d) < 0.05) return '<small>' + monthLabel(prevKey) + '과 같음</small>';
+      return '<small>' + (d > 0 ? '▲' : '▼') + fmt1(Math.abs(d)) + '%p</small>';
+    }
+    // 비율을 사람 수로 풀어 쓰기: 10% 미만이면 1,000명 기준, 아니면 100명 기준
+    function per(r) { return r < 10 ? '1,000명 중 ' + fmt(r * 10) + '명' : '100명 중 ' + fmt(r) + '명'; }
+    $('funnel-note').textContent = '가운데 숫자는 다음 단계로 넘어간 비율' + (prevKey ? ', ▲▼는 ' + monthLabel(prevKey) + ' 대비' : '');
+    $('funnel').innerHTML =
+      '<li class="f-step s1" style="--w:100%"><span>조회수</span><b>' + fmt(t.views) + '</b></li>' +
+      '<li class="f-gap"><span class="f-rate' + (weak === 1 ? ' weak' : '') + '">' + fmt1(r1) + '% ' + dTxt(d1) + '</span><span class="f-side">' + per(r1) + '</span></li>' +
+      '<li class="f-step s2" style="--w:82%"><span>프로필 방문</span><b>' + fmt(t.profile) + '</b></li>' +
+      '<li class="f-gap"><span class="f-rate' + (weak === 2 ? ' weak' : '') + '">' + fmt1(r2) + '% ' + dTxt(d2) + '</span><span class="f-side">' + per(r2) + '</span></li>' +
+      '<li class="f-step s3" style="--w:64%"><span>링크 클릭</span><b>' + fmt(t.link) + '</b></li>' +
+      '<li class="f-branch" title="프로필 방문자 중 팔로우한 비율"><span>+ 팔로우</span><b>' + fmt(t.follows) + '</b><small>프로필 방문의 ' + pct(t.follows, t.profile) + '</small></li>';
+
+    var overall = t.views ? t.link / t.views * 1000 : 0;
+    var lines = ['<span>조회 <strong>1,000회</strong>당 링크 클릭 <strong>' + fmt1(overall) + '회</strong></span>'];
+    if (weak) {
+      lines.push('<span class="warn-line">' + (weak === 1 ? '조회 → 프로필' : '프로필 → 링크') + ' 단계가 ' + monthLabel(prevKey) + '보다 가장 많이 떨어졌어요</span>');
+    } else if (p) {
+      var po = p.views ? p.link / p.views * 1000 : 0;
+      lines.push('<span class="muted">' + monthLabel(prevKey) + '은 1,000회당 ' + fmt1(po) + '회</span>');
+    }
+    $('funnel-summary').innerHTML = lines.join('');
   }
 
   /* ---------- 차트 ---------- */
