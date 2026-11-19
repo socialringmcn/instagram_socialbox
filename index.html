@@ -214,12 +214,68 @@ button, input, select { font: inherit; color: inherit; }
 .eff-legend { display: inline-flex; align-items: center; gap: 4px; }
 .eff-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
 
+/* ---------- 1위 크게 · 2,3위 한 줄 ---------- */
+.eh { display: grid; gap: 10px; padding: 14px; border-radius: var(--radius-sm); }
+.eff.good .eh { background: var(--good-soft); }
+.eff.bad .eh { background: var(--bad-soft); }
+.eh-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.eh-top .eff-title { font-size: 14.5px; }
+.eff.good .eh .eff-rank { background: var(--good); color: #fff; }
+.eff.bad .eh .eff-rank { background: var(--bad); color: #fff; }
+.eh-headline { font-size: 14px; }
+.eh-headline strong { font-size: 24px; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.eff.good .eh-headline strong { color: var(--good); }
+.eff.bad .eh-headline strong { color: var(--bad); }
+.eh .eff-badge { background: var(--card); }
+.eh .cbar { background: var(--card); }
+.er-list { list-style: none; margin: 6px 0 0; padding: 0; }
+.er-list li { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-top: 1px solid var(--line); min-width: 0; font-size: 13px; }
+.er-list li:first-child { border-top: 0; }
+.er-list .eff-rank { width: 20px; height: 20px; font-size: 11px; flex: none; }
+.eff .er-list li .eff-rank { background: var(--soft) !important; color: var(--muted) !important; }
+.er-list .eff-title { font-weight: 500; }
+.er-num { margin-left: auto; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.eff.good .er-num { color: var(--good); }
+.eff.bad .er-num { color: var(--bad); }
+
+/* ---------- 종류별 고효율 · 저효율 ---------- */
+.et { display: grid; gap: 14px; align-content: start; }
+.et-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.et-head .tag { font-size: 13px; padding: 4px 10px; }
+.et-picks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.et-pick { border-radius: var(--radius-sm); padding: 12px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.et-pick.good { background: var(--good-soft); }
+.et-pick.bad { background: var(--bad-soft); }
+.et-label { font-size: 12px; font-weight: 800; display: flex; justify-content: space-between; gap: 6px; }
+.et-label span { font-weight: 500; color: var(--muted); white-space: nowrap; }
+.et-pick.good .et-label { color: var(--good); }
+.et-pick.bad .et-label { color: var(--bad); }
+.et-pick .eff-title { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 13px; }
+.et-pick .eff-headline { font-size: 13px; }
+.et-pick .eff-headline strong { font-size: 20px; }
+.et-pick.good .eff-headline strong { color: var(--good); }
+.et-pick.bad .eff-headline strong { color: var(--bad); }
+.et-pick.good .eff-badge { background: var(--card); color: var(--good); }
+.et-pick.bad .eff-badge { background: var(--card); color: var(--bad); }
+.et-trend { margin-left: auto; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.et-trend.up { background: var(--good-soft); color: var(--good); }
+.et-trend.down { background: var(--bad-soft); color: var(--bad); }
+.et-trend.flat { background: var(--soft); color: var(--muted); }
+.et-why { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; margin-top: 2px; }
+.et-why span { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 5px; background: var(--card); }
+.et-pick.good .et-why { color: var(--good); }
+.et-pick.bad .et-why { color: var(--bad); }
+.et-sum { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 14px; font-size: 13px; border-top: 1px solid var(--line); padding-top: 12px; }
+.et-sum dt { color: var(--muted); white-space: nowrap; }
+.et-sum dd { margin: 0; font-weight: 700; }
+
 /* ---------- 기획 참고 카드 ---------- */
 .plan { display: grid; gap: 14px; align-content: start; }
 .plan-block { display: grid; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
 .plan-block:first-of-type { border-top: 0; padding-top: 0; }
 .plan-label { font-size: 12.5px; font-weight: 700; color: var(--muted); }
-.plan-insight { font-size: 13px; font-weight: 600; }
+.plan-insight { font-size: 12.5px; display: grid; gap: 4px; color: var(--muted); }
+.plan-insight b { color: var(--text); }
 .plan-insight em { font-style: normal; color: var(--pri); }
 .plan-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
 .plan-table th { text-align: right; font-weight: 600; color: var(--faint); padding: 2px 0 4px 6px; white-space: nowrap; }
@@ -389,6 +445,7 @@ body.modal-open { overflow: hidden; }
   .card { padding: 16px; }
   .section-head .segmented { margin-left: 0; width: 100%; }
   .chart-box { height: 230px; }
+  .et-picks { grid-template-columns: 1fr; }
 
   .donut-wrap { grid-template-columns: 1fr; }
   .search input { width: 100%; }
@@ -477,11 +534,11 @@ body.modal-open { overflow: hidden; }
           <div class="eff-grid">
             <article class="card eff good">
               <h3><span class="eff-icon" aria-hidden="true">▲</span>고효율</h3>
-              <ol id="eff-top" class="eff-list"></ol>
+              <div id="eff-top"></div>
             </article>
             <article class="card eff bad">
               <h3><span class="eff-icon" aria-hidden="true">▼</span>저효율</h3>
-              <ol id="eff-low" class="eff-list"></ol>
+              <div id="eff-low"></div>
             </article>
           </div>
         </section>
@@ -1376,18 +1433,33 @@ window.DASHBOARD_CONFIG = {
   /* ---------- 고효율 · 저효율 콘텐츠 ---------- */
   // 효율 기준마다 '도달 → … → 결과' 단계를 정의
   var BASIS = {
-    link:   { tab: '링크 전환', act: '링크를 눌렀어요', what: '링크 클릭', desc: '대비 링크 클릭',
+    link:   { tab: '링크 전환', act: '링크를 눌렀어요', what: '링크 클릭', whatRo: '링크 클릭으로', step2: '링크 연결', short: '클릭', desc: '대비 링크 클릭',
               steps: [{ k: 'profile', label: '프로필' }, { k: 'link', label: '링크' }],
               num: function (v) { return v.link; } },
-    follow: { tab: '팔로우 전환', act: '팔로우했어요', what: '팔로우', desc: '대비 신규 팔로우',
+    follow: { tab: '팔로우 전환', act: '팔로우했어요', what: '팔로우', whatRo: '팔로우로', step2: '팔로우 연결', short: '팔로우', desc: '대비 신규 팔로우',
               steps: [{ k: 'profile', label: '프로필' }, { k: 'follows', label: '팔로우' }],
               num: function (v) { return v.follows; } },
-    engage: { tab: '반응률', act: '반응했어요', what: '반응', desc: '대비 좋아요·저장·공유·댓글',
+    engage: { tab: '반응률', act: '반응했어요', what: '반응', whatRo: '반응으로', step2: '반응', short: '반응', desc: '대비 좋아요·저장·공유·댓글',
               steps: [{ k: 'engage', label: '반응' }],
               num: function (v) { return v.likes + v.saves + v.shares + v.comments; } }
   };
   function stepVal(v, k) { return k === 'engage' ? v.likes + v.saves + v.shares + v.comments : v[k]; }
 
+  function median(arr) {
+    if (!arr.length) return 0;
+    var a = arr.slice().sort(function (x, y) { return x - y; }), m = a.length >> 1;
+    return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
+  }
+  function shortTitle(t) {
+    t = t.replace(/[\u{1F300}-\u{1FAFF}☀-➿]️?/gu, '').replace(/\s+/g, ' ').trim();
+    return t.length > 24 ? t.slice(0, 23) + '…' : t;
+  }
+  var TYPES = [
+    { key: '주간 공구 라인업', label: '공구 라인업', cls: 'lineup', role: '이번 주 공구를 한 번에 안내' },
+    { key: '인플루언서 마켓', label: '인플루언서 마켓', cls: 'market', role: '한 브랜드 판매' }
+  ];
+
+  // 고효율 / 저효율: 1위는 크게(이유까지), 2·3위는 한 줄로
   function renderEfficiency() {
     $('eff-basis').innerHTML = Object.keys(BASIS).map(function (k) {
       return '<button type="button" role="tab" data-basis="' + k + '" aria-selected="' + (state.basis === k) + '">' + BASIS[k].tab + '</button>';
@@ -1402,16 +1474,7 @@ window.DASHBOARD_CONFIG = {
     var sumN = list.reduce(function (a, x) { return a + x.num; }, 0), sumD = list.reduce(function (a, x) { return a + x.den; }, 0);
     var avg = sumD ? sumN / sumD * 100 : 0;
 
-    // 단계별 평균 비율 (이 기간 전체 합 기준): 각 칸 색을 정할 때 비교 대상
-    var tot = { den: sumD };
-    B.steps.forEach(function (st) { tot[st.k] = list.reduce(function (a, x) { return a + stepVal(x.p.values, st.k); }, 0); });
-    var avgStep = [];
-    B.steps.forEach(function (st, i) {
-      var prevTot = i === 0 ? tot.den : tot[B.steps[i - 1].k];
-      avgStep.push(prevTot ? tot[st.k] / prevTot * 100 : 0);
-    });
-
-    // 평균이 10명 이상 되는 가장 작은 기준(100 / 1,000 / 1만 명)을 골라 정수로 말하기
+    // 평균이 10명 이상 되는 가장 작은 기준(100 / 1,000 / 1만 명)으로 정수 표기
     var unit = [100, 1000, 10000].filter(function (u) { return avg / 100 * u >= 10; })[0] || 10000;
     var unitTxt = unit === 100 ? '100명' : unit === 1000 ? '1,000명' : '1만 명';
     function people(rate) { return fmt(rate / 100 * unit); }
@@ -1426,7 +1489,10 @@ window.DASHBOARD_CONFIG = {
     var low = list.length >= 2 ? below.slice(-3).reverse() : [];
     var barMax = Math.max(avg, list.length ? list[0].rate : 0) || 1;
 
-    // 왜 높/낮은지 한 줄 이유: 단계별 비율을 평균과 비교해 가장 두드러진 단계를 말로 풀기
+    // 단계별 평균: 1위의 '왜'를 설명할 때 비교 대상
+    var tot = { den: sumD, profile: 0, out: 0 };
+    list.forEach(function (x) { tot.profile += x.p.values.profile; tot.out += B.steps.length > 1 ? stepVal(x.p.values, B.steps[1].k) : x.num; });
+    var avg1 = tot.den ? tot.profile / tot.den * 100 : 0, avg2 = tot.profile ? tot.out / tot.profile * 100 : 0;
     function reason(x, good) {
       var v = x.p.values;
       if (B.steps.length < 2) {
@@ -1434,43 +1500,50 @@ window.DASHBOARD_CONFIG = {
           .map(function (q) { return q[0] + ' ' + fmt(q[1]); });
         return parts.length ? parts.join(' · ') : '반응이 거의 없었어요';
       }
-      var s1 = x.den ? v.profile / x.den * 100 : 0;                       // 도달 → 프로필
-      var s2 = v.profile ? stepVal(v, B.steps[1].k) / v.profile * 100 : 0; // 프로필 → 결과
-      var r1 = avgStep[0] ? s1 / avgStep[0] : 1, r2 = avgStep[1] ? s2 / avgStep[1] : 1;
-      function times(r) { return r >= 1 ? fmt1(r) + '배' : (r > 0 ? '1/' + fmt(1 / r) : '0'); }
-      if (good) {
-        return r1 >= r2
-          ? '게시물을 본 사람이 <b>프로필로 많이 넘어왔어요</b> (평균의 ' + times(r1) + ')'
-          : '프로필에 온 사람이 <b>' + B.what + '까지 잘 이어졌어요</b> (평균의 ' + times(r2) + ')';
-      }
+      var out = stepVal(v, B.steps[1].k);
+      var r1 = avg1 ? (x.den ? v.profile / x.den * 100 : 0) / avg1 : 1;
+      var r2 = avg2 ? (v.profile ? out / v.profile * 100 : 0) / avg2 : 1;
+      function t(r) { return ' (평균의 ' + (r >= 1 ? fmt1(r) + '배' : '1/' + fmt(1 / r)) + ')'; }
+      if (good) return r1 >= r2
+        ? '게시물을 본 사람이 <b>프로필로 많이 넘어왔어요</b>' + t(r1)
+        : '프로필에 온 사람이 <b>' + B.what + '까지 잘 이어졌어요</b>' + t(r2);
       if (!v.profile) return '게시물을 본 사람이 <b>프로필로 넘어오지 않았어요</b>';
+      if (!out) return '프로필엔 ' + fmt(v.profile) + '명이 왔지만 <b>' + B.what + '는 0명</b>이었어요';
       return r1 <= r2
-        ? '게시물을 본 사람이 <b>프로필로 거의 안 넘어왔어요</b> (평균의 ' + times(r1) + ')'
-        : '프로필엔 왔지만 <b>' + B.what + '로 이어지지 않았어요</b> (평균의 ' + times(r2) + ')';
+        ? '게시물을 본 사람이 <b>프로필로 거의 안 넘어왔어요</b>' + t(r1)
+        : '프로필엔 왔지만 <b>' + B.whatRo + ' 이어지지 않았어요</b>' + t(r2);
     }
-
-    function item(x, i, good) {
-      var p = x.p;
-      var tag = p.brand ? '<span class="tag market">' + esc(p.brand) + '</span>'
+    function tagOf(p) {
+      return p.brand ? '<span class="tag market">' + esc(p.brand) + '</span>'
         : p.group === '주간 공구 라인업' ? '<span class="tag lineup">라인업</span>' : '<span class="tag">' + esc(p.group) + '</span>';
-      var title = p.url
+    }
+    function titleOf(p) {
+      return p.url
         ? '<button type="button" class="title-btn eff-title" data-row="' + p.row + '" title="' + esc(p.title) + '">' + esc(p.title) + '</button>'
         : '<span class="eff-title" title="' + esc(p.title) + '">' + esc(p.title) + '</span>';
-      var ratio = avg ? x.rate / avg : 0;
+    }
+    function hero(x, good) {
+      var p = x.p, ratio = avg ? x.rate / avg : 0;
       var badge = !avg ? '' : ratio >= 1 ? '평균의 ' + fmt1(ratio) + '배' : '평균의 ' + Math.round(ratio * 100) + '%';
-      return '<li><span class="eff-rank">' + (i + 1) + '</span><div class="eff-main">' +
-        '<div class="eff-title-row">' + title + tag + '<span class="eff-date">' + D.fmtDate(p.date) + '</span></div>' +
-        '<p class="eff-headline">' + unitTxt + ' 중 <strong>' + people(x.rate) + '명</strong>이 ' + B.act + ' <span class="eff-badge">' + badge + '</span></p>' +
+      return '<div class="eh">' +
+        '<div class="eh-top"><span class="eff-rank">1</span>' + titleOf(p) + tagOf(p) + '<span class="eff-date">' + D.fmtDate(p.date) + '</span></div>' +
+        '<p class="eh-headline">' + unitTxt + ' 중 <strong>' + people(x.rate) + '명</strong>이 ' + B.act + (badge ? ' <span class="eff-badge">' + badge + '</span>' : '') + '</p>' +
         '<div class="eff-compare" role="img" aria-label="이 게시물 ' + people(x.rate) + '명, 평균 ' + people(avg) + '명">' +
           '<span>이 게시물</span><span class="cbar"><i class="me" style="width:' + Math.max(x.rate / barMax * 100, 1.5) + '%"></i></span><b>' + people(x.rate) + '명</b>' +
           '<span>평균</span><span class="cbar"><i class="avg" style="width:' + (avg / barMax * 100) + '%"></i></span><b class="muted">' + people(avg) + '명</b>' +
         '</div>' +
         '<p class="eff-reason">' + (good ? '✓ ' : '✕ ') + reason(x, good) + '</p>' +
-        '</div></li>';
+        '</div>';
     }
-    var empty = '<li class="eff-empty">비교할 게시물이 2건 이상 있어야 보여 드려요.</li>';
-    $('eff-top').innerHTML = top.length ? top.map(function (x, i) { return item(x, i, true); }).join('') : empty;
-    $('eff-low').innerHTML = low.length ? low.map(function (x, i) { return item(x, i, false); }).join('') : empty;
+    function row(x, i) {
+      return '<li><span class="eff-rank">' + (i + 2) + '</span>' + titleOf(x.p) + tagOf(x.p) + '<b class="er-num">' + people(x.rate) + '명</b></li>';
+    }
+    function block(arr, good) {
+      if (!arr.length) return '<p class="eff-empty">비교할 게시물이 2건 이상 있어야 보여 드려요.</p>';
+      return hero(arr[0], good) + (arr.length > 1 ? '<ol class="er-list">' + arr.slice(1).map(row).join('') + '</ol>' : '');
+    }
+    $('eff-top').innerHTML = block(top, true);
+    $('eff-low').innerHTML = block(low, false);
   }
 
   /* ---------- 다음 콘텐츠 기획 참고 (전체 기간) ---------- */
@@ -1485,34 +1558,36 @@ window.DASHBOARD_CONFIG = {
     var denLabel = hasReach() ? '도달' : '조회';
     $('plan-note').textContent = '전체 기간 게시물 ' + pool.length + '건 기준 · 비율은 ' + denLabel + ' 대비';
 
-    // (1) 게시물 종류별 강점
-    var types = [{ key: '주간 공구 라인업', label: '공구 라인업' }, { key: '인플루언서 마켓', label: '인플루언서 마켓' }, { key: '기타', label: '기타' }]
+    // (1) 게시물 종류별 강점 — '보통 게시물'(중앙값) 기준: 몇 개 대박 게시물에 끌려가지 않게
+    function perPost(l, key) { return l.map(function (p) { return base(p.values) ? stepVal(p.values, key) / base(p.values) * 100 : 0; }); }
+    var types = [{ key: '주간 공구 라인업', label: '공구 라인업' }, { key: '인플루언서 마켓', label: '인플루언서 마켓' }]
       .map(function (t) {
         var l = pool.filter(function (p) { return p.group === t.key; });
+        var lr = perPost(l, 'link');
         return { label: t.label, n: l.length,
-          reach: l.length ? l.reduce(function (a, p) { return a + base(p.values); }, 0) / l.length : 0,
-          link: rateOf(l, 'link'), follow: rateOf(l, 'follows') };
+          reach: median(l.map(function (p) { return base(p.values); })),
+          link: l.length ? median(lr) : null, follow: l.length ? median(perPost(l, 'follows')) : null,
+          linkMin: lr.length ? Math.min.apply(null, lr) : 0, linkMax: lr.length ? Math.max.apply(null, lr) : 0 };
       }).filter(function (t) { return t.n > 0; });
-    var cols = [{ k: 'reach', h: '평균 ' + denLabel, f: function (v) { return fmt(v); } },
+    var cols = [{ k: 'reach', h: denLabel, f: function (v) { return fmt(v); } },
                 { k: 'link', h: '링크 전환', f: function (v) { return v == null ? '–' : fmt1(v) + '%'; } },
                 { k: 'follow', h: '팔로우 전환', f: function (v) { return v == null ? '–' : fmt1(v) + '%'; } }];
     var best = {};
     cols.forEach(function (c) { best[c.k] = Math.max.apply(null, types.map(function (t) { return t[c.k] || 0; })); });
-    $('plan-types').innerHTML = '<thead><tr><th></th>' + cols.map(function (c) { return '<th>' + c.h + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    $('plan-types').innerHTML = '<thead><tr><th>보통 게시물 기준</th>' + cols.map(function (c) { return '<th>' + c.h + '</th>'; }).join('') + '</tr></thead><tbody>' +
       types.map(function (t) {
         return '<tr><td>' + t.label + ' <span class="muted">' + t.n + '건</span></td>' + cols.map(function (c) {
           return '<td' + (types.length > 1 && t[c.k] === best[c.k] && best[c.k] > 0 ? ' class="win"' : '') + '>' + c.f(t[c.k]) + '</td>';
         }).join('') + '</tr>';
       }).join('') + '</tbody>';
     var lu = types.filter(function (t) { return t.label === '공구 라인업'; })[0], mk = types.filter(function (t) { return t.label === '인플루언서 마켓'; })[0];
-    var ins = '';
-    if (lu && mk && lu.follow && mk.follow) {
-      var fr = lu.follow / mk.follow, lr = mk.link && lu.link ? mk.link / lu.link : null;
-      if (fr >= 1.3) ins = '팔로워를 늘리려면 <em>공구 라인업</em>이 마켓보다 ' + fmt1(fr) + '배 효과적이에요';
-      else if (fr <= 1 / 1.3) ins = '팔로워를 늘리려면 <em>인플루언서 마켓</em>이 라인업보다 ' + fmt1(1 / fr) + '배 효과적이에요';
-      if (lr != null) ins += (ins ? '. ' : '') + (lr >= 1.3 ? '링크 클릭은 <em>마켓</em> 쪽이 ' + fmt1(lr) + '배' : lr <= 1 / 1.3 ? '링크 클릭은 <em>라인업</em> 쪽이 ' + fmt1(1 / lr) + '배' : '링크 전환은 둘이 비슷해요');
+    var ins = [];
+    if (lu && mk) {
+      if (mk.follow === 0 && lu.follow > 0) ins.push('<b>팔로우</b>: <em>공구 라인업</em>이 확실히 강해요. 마켓은 보통 게시물의 팔로우가 0명이에요');
+      else if (lu.follow && mk.follow) ins.push('<b>팔로우</b>: ' + (lu.follow >= mk.follow ? '<em>공구 라인업</em>이 마켓의 ' + fmt1(lu.follow / mk.follow) + '배' : '<em>인플루언서 마켓</em>이 라인업의 ' + fmt1(mk.follow / lu.follow) + '배'));
+      if (lu.link != null && mk.link != null) ins.push('<b>링크</b>: 보통 게시물은 ' + (lu.link >= mk.link ? '<em>공구 라인업</em>' : '<em>인플루언서 마켓</em>') + '이 높지만, 마켓은 게시물마다 ' + fmt1(mk.linkMin) + '~' + fmt1(mk.linkMax) + '%로 <b>브랜드에 따라 차이가 커요</b> (아래 브랜드별 참고)');
     }
-    $('plan-types-insight').innerHTML = ins;
+    $('plan-types-insight').innerHTML = ins.map(function (t) { return '<span>' + t + '</span>'; }).join('');
 
     // (2) 요일별 링크 전환
     var wk = [1, 2, 3, 4, 5, 6, 0].map(function (d) {
@@ -1903,7 +1978,7 @@ window.DASHBOARD_CONFIG = {
 
   function bind() {
     document.addEventListener('click', function (e) {
-      var b = e.target.closest('.title-btn');
+      var b = e.target.closest('.title-btn, .dot-btn');
       if (b) openPreview(Number(b.getAttribute('data-row')));
     });
     $('pv-close').addEventListener('click', closePreview);
